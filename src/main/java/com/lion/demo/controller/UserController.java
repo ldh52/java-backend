@@ -2,8 +2,6 @@ package com.lion.demo.controller;
 
 import com.lion.demo.entity.User;
 import com.lion.demo.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
