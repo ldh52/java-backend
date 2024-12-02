@@ -63,7 +63,16 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updateProc() {
+    public String updateProc(String uid, String pwd, String pwd2, String uname, String email, String role) {
+        User user = userService.findByUid(uid);
+        if (pwd.equals(pwd2) && pwd.length() >= 4) {
+            String hashedPwd = BCrypt.hashpw(pwd, BCrypt.gensalt());
+            user.setPwd(hashedPwd);
+        }
+        user.setUname(uname);
+        user.setEmail(email);
+        user.setRole(role);
+        userService.updateUser(user);
         return "redirect:/user/list";
     }
 }
