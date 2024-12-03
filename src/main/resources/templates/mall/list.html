@@ -23,34 +23,27 @@
     </span>
   </h1>
   <hr>
-  <form action="/mall/addToCart" method="post">
-    <table border="1">
-      <tr>
-        <th>Id</th>
-        <th>이미지</th>
-        <th>제목</th>
-        <th>저자</th>
-        <th>출판사</th>
-        <th>가격</th>
-        <th>수량</th>
-      </tr>
-      <tr th:each="book: ${bookList}">
-        <td th:text="${book.bid}">1</td>
-        <td style="text-align: center;">
-          <img th:src="${book.imageUrl}" alt="${book.title}" height="60">
-        </td>
-        <td>
-          <a th:href="@{/mall/detail/{x}(x=${book.bid})}">[[${book.title}]]</a>
-        </td>
-        <td th:text="${book.author}">김난도 외 9명</td>
-        <td th:text="${book.company}">미래의 창</td>
-        <td th:text="${book.price}">20000</td>
-        <td>
-          <input type="text" th:name="|quantities[${book.bid}]|" value="0">
-        </td>
-      </tr>
-    </table><br>
-    <button type="submit">카트에 담기</button>  <!-- 제출 버튼 -->
-  </form>
+  <table border="1">
+    <tr>
+      <th>Id</th>
+      <th>이미지</th>
+      <th>제목</th>
+      <th>저자</th>
+      <th>출판사</th>
+      <th>가격</th>
+    </tr>
+    <tr th:each="book: ${bookList}">
+      <td th:text="${book.bid}">1</td>
+      <td style="text-align: center;">
+        <img th:src="${book.imageUrl}" alt="${book.title}" height="60">
+      </td>
+      <td>
+        <a th:href="@{/mall/detail/{x}(x=${book.bid})}">[[${book.title}]]</a>
+      </td>
+      <td th:text="${book.author}">김난도 외 9명</td>
+      <td th:text="${book.company}">미래의 창</td>
+      <td th:text="${book.price}">20000</td>
+    </tr>
+  </table>
 </body>
 </html>
