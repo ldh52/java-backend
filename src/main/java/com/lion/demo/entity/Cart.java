@@ -23,6 +23,6 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "bid")
     private Book book;
-    
+
     private int quantity;
 }
