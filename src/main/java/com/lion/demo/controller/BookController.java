@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -18,8 +19,9 @@ public class BookController {
     @Autowired private BookService bookService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Book> bookList = bookService.getBooksByPage(1);
+    public String list(@RequestParam(name="p", defaultValue = "1") int page,
+            Model model) {
+        List<Book> bookList = bookService.getBooksByPage(page);
         model.addAttribute("bookList", bookList);
         return "book/list";
     }
