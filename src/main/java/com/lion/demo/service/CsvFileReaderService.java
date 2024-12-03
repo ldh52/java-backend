@@ -20,7 +20,7 @@ public class CsvFileReaderService {
 
     public void csvFileToH2() {
         try {
-            Resource resource = resourceLoader.getResource("classpath:static/data/241114_yes24_국내도서_새로나온_상품.csv");
+            Resource resource = resourceLoader.getResource("classpath:static/data/20241114_yes24_국내도서_새로나온_상품.csv");
             try (Reader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
                  CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
                 int count = 0;
