@@ -33,6 +33,8 @@ public class Order {
 
     // 연관관계 메소드 추가
     public void addOrderItem(OrderItem orderItem) {
+        if (this.orderItems == null)
+            this.orderItems = new ArrayList<>();
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
