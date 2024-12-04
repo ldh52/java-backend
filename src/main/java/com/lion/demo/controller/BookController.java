@@ -6,10 +6,7 @@ import com.lion.demo.service.CsvFileReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,13 @@ public class BookController {
         List<Book> bookList = bookService.getBookList(page, field, query);
         model.addAttribute("bookList", bookList);
         return "book/list";
+    }
+
+    @GetMapping("/detail/{bid}")
+    public String detail(@PathVariable long bid, Model model) {
+        Book book = bookService.findByBid(bid);
+        model.addAttribute("book", book);
+        return "book/detail";
     }
 
     @GetMapping("/insert")
