@@ -59,7 +59,7 @@
         <img th:src="${book.imageUrl}" height="60">
       </td>
       <td>
-        <a th:href="@{/book/detail/{x}(x=${book.bid})}">[[${book.title}]]</a>
+        <a th:href="@{/book/detail/{x}(x=${book.bid}, q=${query})}">[[${book.title}]]</a>
       </td>
       <td th:text="${book.author}">김난도 외 9명</td>
       <td th:text="${book.company}">미래의 창</td>

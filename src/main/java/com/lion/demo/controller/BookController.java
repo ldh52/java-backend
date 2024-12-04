@@ -24,12 +24,20 @@ public class BookController {
 //        List<Book> bookList = bookService.getBooksByPage(page);
         List<Book> bookList = bookService.getBookList(page, field, query);
         model.addAttribute("bookList", bookList);
+        model.addAttribute("query", query);
         return "book/list";
     }
 
     @GetMapping("/detail/{bid}")
-    public String detail(@PathVariable long bid, Model model) {
+    public String detail(@PathVariable long bid,
+                         @RequestParam(name="q", defaultValue = "") String query,
+                         Model model) {
         Book book = bookService.findByBid(bid);
+        if (!query.equals("")) {
+            String highlightedSummary = book.getSummary()
+                    .replaceAll(query, "<span style='background-color: skyblue;'>" + query + "</span>");
+            book.setSummary(highlightedSummary);
+        }
         model.addAttribute("book", book);
         return "book/detail";
     }
