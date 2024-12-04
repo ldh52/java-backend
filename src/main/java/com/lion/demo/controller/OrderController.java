@@ -1,5 +1,6 @@
 package com.lion.demo.controller;
 
+import com.lion.demo.aspect.CheckPermission;
 import com.lion.demo.aspect.LogExecutionTime;
 import com.lion.demo.entity.BookStat;
 import com.lion.demo.entity.Cart;
@@ -59,7 +60,7 @@ public class OrderController {
     }
 
     @GetMapping("/listAll")
-    @LogExecutionTime
+    @CheckPermission("ROLE_ADMIN")
     public String listAll(Model model) {
         // 2024년 12월
         LocalDateTime startTime = LocalDateTime.of(2024, 12, 1, 0, 0);
