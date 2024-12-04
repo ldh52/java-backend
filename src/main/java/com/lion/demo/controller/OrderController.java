@@ -33,7 +33,9 @@ public class OrderController {
     public String createOrder(HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
         List<Cart> cartList = cartService.getCartItemsByUser(uid);
-        Order order = orderService.createOrder(uid, cartList);
+        if (cartList.size() != 0) {
+            Order order = orderService.createOrder(uid, cartList);
+        }
         return "redirect:/order/list";
     }
 
