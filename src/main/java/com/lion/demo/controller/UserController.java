@@ -102,6 +102,11 @@ public class UserController {
         return "common/alertMsg";
     }
 
+    @GetMapping("/loginSuccess")
+    public String loginSuccess() {
+        return "common/alertMsg";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
