@@ -1,12 +1,15 @@
 package com.lion.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 public class SecurityConfig {
+    @Autowired private AuthenticationFailureHandler failureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,6 +29,7 @@ public class SecurityConfig {
                         .usernameParameter("uid")
                         .passwordParameter("pwd")
                         .defaultSuccessUrl("/user/loginSuccess", true)  // 로그인 후 해야할 일
+                        .failureHandler(failureHandler)
                         .permitAll()
                 )
                 .logout(auth -> auth

@@ -120,6 +120,15 @@ public class UserController {
         return "common/alertMsg";
     }
 
+    @GetMapping("/loginFailure")
+    public String loginFailure(Model model) {
+        String msg = "잘못 입력하였습니다.";
+        String url = "/user/login";
+        model.addAttribute("msg", msg);
+        model.addAttribute("url", url);
+        return "common/alertMsg";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

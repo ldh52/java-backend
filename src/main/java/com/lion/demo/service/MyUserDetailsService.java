@@ -18,10 +18,17 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByUid(username);
 
-        if (user != null) {
-            log.info("Login 완료: " + user.getUid());
-            return new MyUserDetails(user);
+//        if (user != null) {
+//            log.info("Login 완료: " + user.getUid());
+//            return new MyUserDetails(user);
+//        }
+//        return null;
+        if (user == null) {
+            log.warn("Login 실패: 아이디를 찾을 수 없습니다. (username: " + username + ")");
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
         }
-        return null;
+
+        log.info("Login 시도: " + user.getUid());
+        return new MyUserDetails(user);
     }
 }
