@@ -28,7 +28,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration().getRegistrationId();
         switch (provider) {
             case "github":
-                
+
                 break;
 
             case "google":
