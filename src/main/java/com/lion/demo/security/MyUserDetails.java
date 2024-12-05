@@ -1,11 +1,11 @@
-package com.lion.demo.entity;
+package com.lion.demo.security;
 
+import com.lion.demo.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 // 스프링 시큐리티가 로그인 포스트 요청을 낚아채서 로그인을 진행시킴
 // 로컬 로그인 - UserDetails 구현
