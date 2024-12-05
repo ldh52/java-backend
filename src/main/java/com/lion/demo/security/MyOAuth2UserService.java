@@ -88,7 +88,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
             case "kakao":
                 long kid = (long) oAuth2User.getAttribute("id");
-                uid = provider + "_" + id;
+                uid = provider + "_" + kid;
                 user = userService.findByUid(uid);
                 if (user == null) {         // 내 DB에 없으면 가입을 시켜줌
                     Map<String, String> properties = (Map) oAuth2User.getAttribute("properties");
