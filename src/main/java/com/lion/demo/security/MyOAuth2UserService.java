@@ -21,7 +21,7 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        String uid, email, uname;
+        String uid, email, uname, profileUrl;
         String hashedPwd = bCryptPasswordEncoder.encode("Social Login");
         User user = null;
 
@@ -37,9 +37,10 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
                 if (user == null) {         // 내 DB에 없으면 가입을 시켜줌
                     uname = oAuth2User.getAttribute("name");
                     email = oAuth2User.getAttribute("email");
+                    profileUrl = oAuth2User.getAttribute("avatar_url");
                     user = User.builder()
                             .uid(uid).pwd(hashedPwd).uname(uname).email(email)
-                            .regDate(LocalDate.now()).role("ROLE_USER").provider(provider)
+                            .regDate(LocalDate.now()).role("ROLE_USER").provider(provider).profileUrl(profileUrl)
                             .build();
                     userService.registerUser(user);
                     log.info("깃허브 계정을 통해 회원가입이 되었습니다. " + user.getUname());
@@ -47,13 +48,23 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
                 break;
 
             case "google":
-
+                String sub = oAuth2User.getAttribute("sub");    // Google ID
+                uid = provider + "_" + sub;
+                user = userService.findByUid(uid);
+                if (user == null) {         // 내 DB에 없으면 가입을 시켜줌
+                    uname = oAuth2User.getAttribute("name");
+                    uname = (uname == null) ? "google_user" : uname;
+                    email = oAuth2User.getAttribute("email");
+                    profileUrl = oAuth2User.getAttribute("picture");
+                    user = User.builder()
+                            .uid(uid).pwd(hashedPwd).uname(uname).email(email)
+                            .regDate(LocalDate.now()).role("ROLE_USER").provider(provider).profileUrl(profileUrl)
+                            .build();
+                    userService.registerUser(user);
+                    log.info("구글 계정을 통해 회원가입이 되었습니다. " + user.getUname());
+                }
                 break;
         }
-
-
-
-
 
         return new MyUserDetails(user, oAuth2User.getAttributes());
     }
