@@ -16,6 +16,8 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
         String msg = "아이디 또는 비밀번호가 틀렸습니다.";
         String url = "/user/login";
 
+//        System.out.println("=====================" + exception.getMessage());
+
         // 예외 메세지 확인
         if (exception.getMessage().contains("사용자를 찾을 수 없습니다")) {
             msg = exception.getMessage();
