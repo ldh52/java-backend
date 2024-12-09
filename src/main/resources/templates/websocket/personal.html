@@ -19,7 +19,7 @@
             socket.onmessage = event => {
                 console.log('Message from server: ' + event.data);
                 const message = document.getElementById('message');
-                message.value += recipientId + ' wrote: ' + event.data + '\n';
+                message.value += event.data + '\n';
             }
             socket.onclose = () => {
                 console.log('Disconnected from the server.');
@@ -28,12 +28,12 @@
         }
         function sendMessage() {
             recipientId = document.getElementById('recipientId').value.trim();
-            const message = document.getElementById('messageInput').value;
+            const messageInput = document.getElementById('messageInput').value;
             if (socket && socket.readyState === socket.OPEN) {
-                socket.send(recipientId + ':' + message);
+                socket.send(recipientId + ':' + messageInput);
                 document.getElementById('messageInput').value = '';
                 const message = document.getElementById('message');
-                message.value += userId + ' wrote: ' + message + '\n';
+                message.value += userId + ' wrote: ' + messageInput + '\n';
             } else {
                 alert('WebSocket is not connected.');
             }
@@ -61,7 +61,7 @@
         <span id="status">Connecting ...</span>
         <button onclick="connect()">연결</button>
     </p>
-    <input type="text" id="recipientId" placeholder="상대방의 ID를 입력하세요.">
+    <input type="text" id="recipientId" placeholder="상대방의 ID를 입력하세요."><br><br>
     <textarea id="message" rows="10" cols="60" readonly></textarea><br><br>
     <input type="text" id="messageInput" placeholder="Enter your message here" onkeydown="handleEnterKey(event)"><br><br>
     <button onclick="sendMessage()">전송</button>

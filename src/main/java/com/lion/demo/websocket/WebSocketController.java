@@ -17,5 +17,10 @@ public class WebSocketController {
     public String echo2() {
         return "websocket/echo2";
     }
+
+    @GetMapping("/personal")
+    public String personal() {
+        return "websocket/personal";
+    }
 }
 

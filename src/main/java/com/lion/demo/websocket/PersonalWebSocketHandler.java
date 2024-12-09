@@ -27,6 +27,7 @@ public class PersonalWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        String userId = getUserId(session);
         String payload = message.getPayload();      // recipientId : message
         String[] parts = payload.split(":", 2);
         System.out.println("Received message: " + payload);
@@ -37,7 +38,7 @@ public class PersonalWebSocketHandler extends TextWebSocketHandler {
 
             WebSocketSession targetSession = userSessions.get(recipientId);
             if (targetSession != null && targetSession.isOpen()) {
-                targetSession.sendMessage(new TextMessage(msg));
+                targetSession.sendMessage(new TextMessage("from " + userId + ": " + msg));
             }
         }
     }
