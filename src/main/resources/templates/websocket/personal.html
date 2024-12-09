@@ -20,6 +20,8 @@
                 console.log('Message from server: ' + event.data);
                 const message = document.getElementById('message');
                 message.value += event.data + '\n';
+                const recipient = event.data.split(':')[0].substring(5);
+                document.getElementById('recipientId').value = recipient;
             }
             socket.onclose = () => {
                 console.log('Disconnected from the server.');
@@ -33,7 +35,7 @@
                 socket.send(recipientId + ':' + messageInput);
                 document.getElementById('messageInput').value = '';
                 const message = document.getElementById('message');
-                message.value += userId + ' wrote: ' + messageInput + '\n';
+                message.value += 'I wrote: ' + messageInput + '\n';
             } else {
                 alert('WebSocket is not connected.');
             }
@@ -55,7 +57,7 @@
     </script>
 </head>
 <body style="margin: 40px;">
-    <h1>WebSocket - Echo2</h1>
+    <h1>WebSocket - Personal</h1>
     <input type="hidden" id="userId" th:value="${session.sessUid}">
     <p>Status:
         <span id="status">Connecting ...</span>
