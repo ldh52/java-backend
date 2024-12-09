@@ -11,8 +11,11 @@
                 console.log('Connected.');
                 socket.send('Hello everyone!');
             }
-            socket.onmessage = event => {       // socket.onmessage = function(event) {
+            socket.onmessage = event => {
                 console.log('Message from server: ' + event.data);
+            }
+            socket.onclose = () => {
+                console.log('Disconnected.');
             }
         }
     </script>
