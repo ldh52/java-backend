@@ -101,7 +101,7 @@ function handlePopover() {
                 if (friendUid !== '') {
                     if (confirm(`친구 ${friendUid}를 추가합니다.`)) {
                         // 서버에 AJAX 요청 예시
-                        $.post('/chatMessage/addFriend', { friendUid: friendUid }, function (response) {
+                        $.post('/chatting/addFriend', { friendUid: friendUid }, function (response) {
                             console.log('친구 추가 성공:', response);
                             fetchChatterList();
                         });
