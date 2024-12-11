@@ -12,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/chatting")
@@ -78,6 +76,33 @@ public class ChattingController {
         model.addAttribute("user", user);
         model.addAttribute("friend", friend);
         return "chatting/chat";
+    }
+
+    @GetMapping("/getChatItems")
+    @ResponseBody
+    public ResponseEntity<Map<String, List<ChatItem>>> getChatItems(
+            @RequestParam("userId") String userId, @RequestParam("recipientId") String recipientId
+    ) {
+        User user = userService.findByUid(userId);
+        User friend = userService.findByUid(recipientId);
+        Map<String, List<ChatMessage>> map = chatMessageService.getChatMessagesByDate();
+
+        Map<String, List<ChatItem>> chatItemsByDate = new LinkedHashMap<>();
+        for (Map.Entry<String, List<ChatMessage>> entry: map.entrySet()) {
+            String key = entry.getKey();
+            List<ChatItem> list = new ArrayList<>();
+            for (ChatMessage cm: map.get(key)) {
+                ChatItem chatItem = ChatItem.builder()
+                        .isMine(cm.getSender().getUid().equals(userId) ? 1 : 0)
+                        .message(cm.getMessage())
+                        .timeStr(timeUtil.amPmStr(cm.getTimestamp()))
+                        .hasRead(cm.getHasRead())
+                        .build();
+                list.add(chatItem);
+            }
+            chatItemsByDate.put(key, list);
+        }
+        return ResponseEntity.ok(chatItemsByDate);
     }
 
     @GetMapping("/mock")

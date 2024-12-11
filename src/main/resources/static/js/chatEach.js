@@ -23,14 +23,14 @@ function connect() {
 	}
 }
 
-async function fetchChatMessages() {
+async function fetchChatItems() {
     const userId = $('#userId').val();
     const recipientId  = $('#recipientId').val();
     try {
-        const response = await fetch(`/chatting/getMessages?userId=${userId}&recipientId=${recipientId}`);
+        const response = await fetch(`/chatting/getChatItems?userId=${userId}&recipientId=${recipientId}`);
         if (response.ok) {
-            const messagesByDate = await response.json();
-            updateChatContainer(messagesByDate);
+            const chatItemsByDate = await response.json();
+            updateChatContainer(chatItemsByDate);
         }
     } catch (error) {
         console.error("Failed to fetch messages:", error);
