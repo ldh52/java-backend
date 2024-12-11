@@ -11,7 +11,7 @@
 	<script>
 		// Scroll to the bottom of chat container on page load
 		window.onload = () => {
-      // connect();
+      connect();
       fetchChatItems();
 		}
 	</script>
@@ -39,6 +39,8 @@
 										<span style="font-weight: bold;" th:text="${friend.uname}">마리아</span>
 										<input type="hidden" id="recipientId" th:value="${friend.uid}">
 										<input type="hidden" id="userId" th:value="${user.uid}">
+                    <input type="hidden" id="chattingStatus" th:value="|chat:${friend.uid}|">
+                    <input type="hidden" id="serverPort" th:value="${session.serverPort}">
 									</div>
 									<div>
 										<i class="fa-solid fa-magnifying-glass me-2"></i>
