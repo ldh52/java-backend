@@ -5,7 +5,8 @@
 	<link href="/css/chatEach.css" rel="stylesheet">
 	<style>
 		th { text-align: center; }
-		td { vertical-align: middle; }
+    tr { min-height: 50px; overflow: hidden; }
+		td { vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 	</style>
 	<script src="/js/chatEach.js"></script>
 	<script>
@@ -13,6 +14,9 @@
 		window.onload = () => {
       connect();
       fetchChatItems();
+      setTimeout(() => {
+        sendSignal();
+      }, 100);
 		}
 	</script>
 </head>

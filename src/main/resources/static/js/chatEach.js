@@ -129,3 +129,10 @@ function sendMessage() {
         }
     });
 }
+
+function sendSignal() {
+    const recipientId = document.getElementById('recipientId').value;
+
+    // socket 송신 - 상대방에게 내가 접속했음을 알림
+    socket.send(recipientId + ':Alive');
+}
