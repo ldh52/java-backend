@@ -85,7 +85,7 @@ public class ChattingController {
     ) {
         User user = userService.findByUid(userId);
         User friend = userService.findByUid(recipientId);
-        Map<String, List<ChatMessage>> map = chatMessageService.getChatMessagesByDate();
+        Map<String, List<ChatMessage>> map = chatMessageService.getChatMessagesByDate(userId, recipientId);
 
         Map<String, List<ChatItem>> chatItemsByDate = new LinkedHashMap<>();
         for (Map.Entry<String, List<ChatMessage>> entry: map.entrySet()) {
@@ -97,6 +97,8 @@ public class ChattingController {
                         .message(cm.getMessage())
                         .timeStr(timeUtil.amPmStr(cm.getTimestamp()))
                         .hasRead(cm.getHasRead())
+                        .friendUname(friend.getUname())
+                        .friendProfileUrl(friend.getProfileUrl())
                         .build();
                 list.add(chatItem);
             }

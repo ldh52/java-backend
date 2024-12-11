@@ -37,11 +37,11 @@ async function fetchChatItems() {
     }
 }
 
-function updateChatContainer(messagesByDate) {
+function updateChatContainer(chatItemsByDate) {
     const chatContainer = document.getElementById("chatContainer");
     chatContainer.innerHTML = ""; // 기존 메시지 초기화
 
-    for (const [date, messages] of Object.entries(messagesByDate)) {
+    for (const [date, chatItems] of Object.entries(chatItemsByDate)) {
         // 날짜 표시
         const dateDiv = document.createElement("div");
         dateDiv.className = "text-center mt-2 mb-3";
@@ -51,15 +51,15 @@ function updateChatContainer(messagesByDate) {
         chatContainer.appendChild(dateDiv);
 
         // 메시지 표시
-        messages.forEach(chat => {
-            const messageDiv = document.createElement("div");
+        chatItems.forEach(chat => {
+            const chatItemDiv = document.createElement("div");
 
             if (chat.isMine === 0) {
                 // 받은 메시지
-                messageDiv.innerHTML = `
+                chatItemDiv.innerHTML = `
                     <div>
-                        <img src="${chat.friendImageUrl}" alt="${chat.friendName}" width="28" style="border-radius: 30%">
-                        <span style="font-size: 0.6rem;">${chat.friendName}</span>
+                        <img src="${chat.friendProfileUrl}" alt="${chat.friendUname}" width="28" style="border-radius: 30%">
+                        <span style="font-size: 0.6rem;">${chat.friendUname}</span>
                     </div>
                     <div class="message received">
                         <p>${chat.message}</p>
@@ -68,7 +68,7 @@ function updateChatContainer(messagesByDate) {
                 `;
             } else {
                 // 보낸 메시지
-                messageDiv.innerHTML = `
+                chatItemDiv.innerHTML = `
                     <div class="message sent">
                         <span style="font-size: 0.6rem; margin-right: 3px;">
                             ${chat.hasRead === 0 ? `<span class="read-status">1</span>` : ''}
@@ -78,7 +78,7 @@ function updateChatContainer(messagesByDate) {
                     </div>
                 `;
             }
-            chatContainer.appendChild(messageDiv);
+            chatContainer.appendChild(chatItemDiv);
         });
     }
     // input tag

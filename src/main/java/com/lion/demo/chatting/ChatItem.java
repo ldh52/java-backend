@@ -14,4 +14,6 @@ public class ChatItem {
     private String message;
     private String timeStr;
     private int hasRead;
+    private String friendUname;
+    private String friendProfileUrl;
 }
