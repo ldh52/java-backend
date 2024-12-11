@@ -69,6 +69,17 @@ public class ChattingController {
         return "";
     }
 
+    @GetMapping("/chat/{uid}")
+    public String chat(@PathVariable String uid, HttpSession session, Model model) {
+        String sessUid = (String) session.getAttribute("sessUid");
+        User user = userService.findByUid(sessUid);
+        User friend = userService.findByUid(uid);
+
+        model.addAttribute("user", user);
+        model.addAttribute("friend", friend);
+        return "chatting/chat";
+    }
+
     @GetMapping("/mock")
     public String mockForm() {
         return "chatting/mock";

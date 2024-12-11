@@ -115,7 +115,7 @@ public class UserController {
         session.setAttribute("sessUid", uid);
         session.setAttribute("sessUname", user.getUname());
         String msg = user.getUname() + "님 환영합니다.";
-        String url = "/book/list";
+        String url = "/chatting/home";
         model.addAttribute("msg", msg);
         model.addAttribute("url", url);
         return "common/alertMsg";
