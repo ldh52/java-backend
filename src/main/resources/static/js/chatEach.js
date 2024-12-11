@@ -100,3 +100,28 @@ function handleEnterKey(event) {
 		sendMessage();
 	}
 }
+
+function sendMessage() {
+    const recipientId = document.getElementById('recipientId').value;
+    const userId = document.getElementById('userId').value;
+    const message = document.getElementById('messageInput').value;
+
+    // socket 송신
+
+    // DB에 저장 - Controller에게 보내기
+    const formData = new FormData();
+    formData.append('senderUid', userId);
+    formData.append('recipientUid', recipientId);
+    formData.append('message', message);
+    $.ajax({
+        type: 'POST',
+        data: formData,
+        url: '/chatting/insert',
+        processData: false,     // jQuery가 data를 변환하는 것을 방지
+        contentType: false,     // jQuery가 content type을 변경하는 것을 방지
+        success: function() {
+            $('#messageInput').val('');
+            fetchChatItems();
+        }
+    });
+}
