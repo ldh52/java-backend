@@ -90,7 +90,7 @@ function updateChatContainer(chatItemsByDate) {
     inputTag.type = "text";
     inputTag.id = "messageInput";
     inputTag.placeholder = "메시지 입력";
-    inputTag.addEventListener("keydown", handleEnterKey);
+    inputTag.addEventListener("keypress", handleEnterKey);
     chatContainer.appendChild(inputTag);
 
     // 스크롤을 가장 아래로 내리기

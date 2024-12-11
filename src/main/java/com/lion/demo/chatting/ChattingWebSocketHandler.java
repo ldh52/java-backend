@@ -1,5 +1,6 @@
 package com.lion.demo.chatting;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 public class ChattingWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
     private final Map<String, String> userStatus = new ConcurrentHashMap<>();
@@ -22,9 +24,9 @@ public class ChattingWebSocketHandler extends TextWebSocketHandler {
         if (userId != null) {
             userSessions.put(userId, session);
             userStatus.put(userId, status);
-            System.out.println("User connected: " + userId + ", status: " + status);
+            log.info("User connected: " + userId + ", status: " + status);
         } else {
-            System.out.println("User ID is null. Closing session.");
+            log.info("User ID is null. Closing session.");
             session.close();
         }
     }
@@ -57,7 +59,7 @@ public class ChattingWebSocketHandler extends TextWebSocketHandler {
         String userId = getUserId(session);
         if (userId != null) {
             userSessions.remove(userId);
-            System.out.println("User disconnected: " + userId);
+            log.debug("User disconnected: " + userId);
         }
     }
 
@@ -75,6 +77,7 @@ public class ChattingWebSocketHandler extends TextWebSocketHandler {
         Object userId = session.getAttributes().get("userId");
         return userId != null ? userId.toString() : null;
     }
+
     private String getStatus(WebSocketSession session) {
         Object status = session.getAttributes().get("status");
         return status != null ? status.toString() : null;
