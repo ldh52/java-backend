@@ -6,7 +6,9 @@ function connect() {
     const chattingStatus = document.getElementById('chattingStatus').value;
     console.log(chattingStatus);
     const serverPort = $('#serverPort').val();
-	socket = new WebSocket('ws://localhost:' + serverPort + '/chat?userId=' + userId + '&status=' + chattingStatus);
+	const serverIp = $('#serverIp').val();
+    //	socket = new WebSocket('ws://localhost:' + serverPort + '/chat?userId=' + userId + '&status=' + chattingStatus);
+    socket = new WebSocket(`ws://${serverIp}:${serverPort}/chat?userId=${userId}&status=${chattingStatus}`);
 
 	socket.onopen = () => {
 		console.log('Connected as ' + userId);
