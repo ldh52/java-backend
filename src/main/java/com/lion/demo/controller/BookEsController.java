@@ -33,7 +33,7 @@ public class BookEsController {
         for (int i = startPage; i <= endPage; i++)
             pageList.add(i);
 
-        session.setAttribute("menu", "book");
+        session.setAttribute("menu", "bookEs");
         session.setAttribute("currentBookEsPage", page);
         model.addAttribute("bookEsList", pagedResult.getContent());
         model.addAttribute("field", field);

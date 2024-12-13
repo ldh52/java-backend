@@ -16,7 +16,7 @@
     function search() {
       const field = document.getElementById('field').value;
       const query = document.getElementById('query').value;
-      const uri = '/book/list?p=1' + '&f=' + field + '&q=' + query;
+      const uri = '/bookEs/list?p=1' + '&f=' + field + '&q=' + query;
       location.href = encodeURI(uri);   // 한글 입력시 인코딩해서 전달
     }
   </script>
