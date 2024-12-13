@@ -1,6 +1,7 @@
 package com.lion.demo.controller;
 
 import com.lion.demo.entity.BookEs;
+import com.lion.demo.entity.BookEsDto;
 import com.lion.demo.service.BookEsService;
 import com.lion.demo.service.CsvFileReaderService;
 import jakarta.servlet.http.HttpSession;
@@ -25,7 +26,7 @@ public class BookEsController {
                        @RequestParam(name="q", defaultValue = "") String query,
                        HttpSession session, Model model) {
 
-        Page<BookEs> pagedResult = bookEsService.getPagedBooks(page, field, query);
+        Page<BookEsDto> pagedResult = bookEsService.getPagedBooks(page, field, query);
         int totalPages = pagedResult.getTotalPages();
         int startPage = (int) Math.ceil((page - 0.5) / BookEsService.PAGE_SIZE - 1) * BookEsService.PAGE_SIZE + 1;
         int endPage = Math.min(startPage + BookEsService.PAGE_SIZE - 1, totalPages);
@@ -35,7 +36,7 @@ public class BookEsController {
 
         session.setAttribute("menu", "bookEs");
         session.setAttribute("currentBookEsPage", page);
-        model.addAttribute("bookEsList", pagedResult.getContent());
+        model.addAttribute("bookEsDtoList", pagedResult.getContent());
         model.addAttribute("field", field);
         model.addAttribute("query", query);
         model.addAttribute("totalPages", totalPages);
@@ -47,7 +48,7 @@ public class BookEsController {
 
     @GetMapping("/detail/{bookId}")
     public String detail(@PathVariable String bookId,
-                         @RequestParam(name="q", defaultValue = "") String query,
+                         @RequestParam(name="q", defaultValue = "**") String query,
                          Model model) {
         BookEs bookEs = bookEsService.findById(bookId);
         if (!query.equals("")) {
