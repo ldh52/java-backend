@@ -69,11 +69,11 @@
           <table class="table">
             <tr>
               <th style="width: 10%">이미지</th>
-              <th style="width: 44%">제목</th>
+              <th style="width: 38%">제목</th>
               <th style="width: 20%">저자</th>
-              <th style="width: 14%">출판사</th>
-              <th style="width: 12%">가격</th>
-                <th style="width: 12%">스코어</th>
+              <th style="width: 12%">출판사</th>
+              <th style="width: 10%">가격</th>
+                <th style="width: 10%">스코어</th>
             </tr>
             <tr th:each="bookEsDto: ${bookEsDtoList}">
               <td style="text-align: center;">
@@ -89,7 +89,7 @@
               <td style="text-align: right;">
                 <span th:text="|${#numbers.formatInteger(bookEsDto.bookEs.price, 0, 'COMMA')}원|">15,000원</span>
               </td>
-                <td th:text="${#numbers.formatDecimal(bookEsDto.matchScore, 1, 2)}">스코어</td>
+                <td th:text="${#numbers.formatDecimal(bookEsDto.matchScore, 1, 2)}" style="text-align: center;">스코어</td>
             </tr>
           </table>
 

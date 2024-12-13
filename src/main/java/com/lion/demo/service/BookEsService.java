@@ -29,29 +29,15 @@ public class BookEsService {
         return bookEsRepository.findById(bookId).orElse(null);
     }
 
-    public Page<BookEsDto> getPagedBooks(int page, String field, String keyword) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
-        Query query = NativeQuery.builder()
-                .withQuery(buildMatchQuery(field, keyword))
-                .build();
-        SearchHits<BookEs> searchHits = elasticsearchTemplate.search(query, BookEs.class);
-        List<BookEsDto> bookEsDtoList = searchHits
-                .getSearchHits()
-                .stream()
-                .map(hit -> new BookEsDto(hit.getContent(), hit.getScore()))
-                .toList();
-
-        long totalHits = searchHits.getTotalHits();
-        return new PageImpl<>(bookEsDtoList, pageable, totalHits);
-    }
-
     public void insertBookEs(BookEs bookEs) {
         bookEsRepository.save(bookEs);
     }
 
-    private Page<BookEsDto> getBooksByKeyword(String keyword, String field) {
+    public Page<BookEsDto> getPagedBooks(int page, String field, String keyword) {
+        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
         Query query = NativeQuery.builder()
                 .withQuery(buildMatchQuery(field, keyword))
+                .withPageable(PageRequest.of(page - 1, PAGE_SIZE))
                 .build();
         SearchHits<BookEs> searchHits = elasticsearchTemplate.search(query, BookEs.class);
         List<BookEsDto> bookEsDtoList = searchHits
@@ -61,7 +47,6 @@ public class BookEsService {
                 .toList();
 
         long totalHits = searchHits.getTotalHits();
-        Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         return new PageImpl<>(bookEsDtoList, pageable, totalHits);
     }
 
