@@ -59,7 +59,7 @@ public class BookEsService {
                             "match": {
                                 "%s": {
                                     "query": "%s",
-                                    "fuzziness": "AUTO",
+                                    "fuzziness": "AUTO"
                                 }
                             }
                         }        
