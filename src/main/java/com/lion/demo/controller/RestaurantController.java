@@ -29,7 +29,7 @@ public class RestaurantController {
                        @RequestParam(name="f", defaultValue = "name") String field,
                        @RequestParam(name="q", defaultValue = "") String query,
                        HttpSession session, Model model) {
-
+        System.out.println("page=" + page + ", field=" + field + ", query=" + query);
         Page<RestaurantDto> pagedResult = restaurantService.getPagedRestaurants(page, field, query);
         int totalPages = pagedResult.getTotalPages();
         int startPage = (int) Math.ceil((page - 0.5) / RestaurantService.PAGE_SIZE - 1) * RestaurantService.PAGE_SIZE + 1;

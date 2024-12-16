@@ -84,8 +84,8 @@
                   <span style="font-weight: bold;" th:text="${restaurantDto.restaurant.name}">통인시장</span>
                 </a>
               </td>
-              <td th:text="${restaurantDto.infoCount}">8</td>
-              <td th:text="${restaurantDto.reviewCount}">5</td>
+              <td th:text="${restaurantDto.infoCount}" style="text-align: center;">8</td>
+              <td th:text="${restaurantDto.reviewCount}" style="text-align: center;">5</td>
               <td th:text="${#numbers.formatDecimal(restaurantDto.reviewScore, 1, 1)}" style="text-align: center;">3.4</td>
               <td th:text="${#numbers.formatDecimal(restaurantDto.matchScore, 1, 2)}" style="text-align: center;">스코어</td>
             </tr>
