@@ -54,8 +54,16 @@ public class BookEsService {
         if (keyword.isEmpty()) {
             return new StringQuery("{\"match_all\": {}}");
         }
-        String queryString = String.format(
-                "{\"match\": {\"%s\": {\"query\": \"%s\", \"fuzziness\": \"AUTO\"}}}",
+        String queryString = String.format("""
+                        {
+                            "match": {
+                                "%s": {
+                                    "query": "%s",
+                                    "fuzziness": "AUTO",
+                                }
+                            }
+                        }        
+                """,
                 field, keyword
         );
         return new StringQuery(queryString);
