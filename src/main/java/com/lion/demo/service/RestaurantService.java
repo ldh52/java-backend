@@ -69,16 +69,33 @@ public class RestaurantService {
         }
         if (field.equals("info")) {
             queryString = String.format("""
-                    {
-                        "multi_match": {
-                            "query": "%s",
-                            "fields": [
-                                "info.*"
-                            ],
-                            "fuzziness": "AUTO"
-                        }
-                    }        
-                """, field, keyword
+                        {
+                            "multi_match": {
+                                "query": "%s",
+                                "fields": [
+                                    "info.*"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }        
+                    """, keyword
+            );
+        } else if (field.equals("reviews")) {
+            queryString = String.format("""
+                        {
+                            "nested": {
+                                "path": "reviews",
+                                "query": {
+                                    "match": {
+                                        "reviews.review": {
+                                            "query": "%s",
+                                            "fuzziness": "AUTO"
+                                        }
+                                    }
+                                }
+                            }
+                        }        
+                    """, keyword
             );
         } else {
             queryString = String.format("""

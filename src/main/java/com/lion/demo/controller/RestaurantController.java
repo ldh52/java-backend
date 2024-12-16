@@ -1,6 +1,7 @@
 package com.lion.demo.controller;
 
 import com.lion.demo.entity.BookEsDto;
+import com.lion.demo.entity.Restaurant;
 import com.lion.demo.entity.RestaurantDto;
 import com.lion.demo.service.BookEsService;
 import com.lion.demo.service.CsvFileReaderService;
@@ -10,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -48,6 +48,22 @@ public class RestaurantController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("pageList", pageList);
         return "restaurant/list";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable String id, Model model) {
+        Restaurant restaurant = restaurantService.findById(id);
+        Map<String, Object> infoMap = new HashMap<>();
+        for (String key: restaurant.getInfo().keySet()) {
+            if (key.equals("전화번호"))
+                continue;
+            infoMap.put(key, restaurant.getInfo().get(key));
+        }
+
+        model.addAttribute("restaurant", restaurant);
+        model.addAttribute("infoMap", infoMap);
+        model.addAttribute("infoCount", restaurant.getInfo().size());
+        return "restaurant/detail";
     }
 
     @GetMapping("/init")
