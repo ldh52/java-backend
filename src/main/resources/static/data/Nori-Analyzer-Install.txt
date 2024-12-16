@@ -1,4 +1,4 @@
-[AWS에서 설치할 경우]
+[AWS에 설치할 경우]
 sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-nori
 
 [윈도우에 설치할 경우]
@@ -9,8 +9,11 @@ C:\Tools\Elasticsearch\bin\elasticsearch-plugin install analysis-nori
 - 설치 확인
 elasticsearch-plugin list
 
+기존 restaurants 삭제
+curl -X DELETE localhost:9200/restaurants
+
 [Nori Analyzer가 적용된 인덱스 생성]
-curl -X PUT "http://localhost:9200/restaurants_v2" \
+curl -X PUT "http://localhost:9200/restaurants" \
   -H "Content-Type: application/json" \
   -d '{
   "settings": {
@@ -34,10 +37,14 @@ curl -X PUT "http://localhost:9200/restaurants_v2" \
         "type": "text",
         "analyzer": "korean_analyzer"
       },
+      "info": {
+        "type": "object",
+        "dynamic": true
+      },
       "reviews": {
         "type": "nested",
         "properties": {
-          "text": {
+          "review": {
             "type": "text",
             "analyzer": "korean_analyzer"
           },
@@ -47,4 +54,6 @@ curl -X PUT "http://localhost:9200/restaurants_v2" \
         }
       }
     }
-  }'
+  }
+}'
+
