@@ -4,12 +4,10 @@ import com.lion.demo.entity.Restaurant;
 import com.lion.demo.entity.RestaurantDto;
 import com.lion.demo.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.StringQuery;
@@ -32,12 +30,22 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
-    public Page<RestaurantDto> getPagedRestaurants(int page, String field, String keyword) {
+    public Page<RestaurantDto> getPagedRestaurants(int page, String field, String keyword, String sortDirection,
+                                                   boolean sortWithinResults) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
-        Query query = NativeQuery.builder()
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        NativeQueryBuilder queryBuilder = NativeQuery.builder()
                 .withQuery(buildMatchQuery(field, keyword))
-                .withPageable(PageRequest.of(page - 1, PAGE_SIZE))
-                .build();
+                .withPageable(pageable);
+        if (sortWithinResults || keyword.isEmpty()) {        // 결과내 정렬 체크 or 키워드가 비어있을 경우
+            queryBuilder
+                    .withSort(Sort.by(direction, "name.keyword"))       // name.keyword 기준 정렬
+                    .withTrackScores(true);
+        } else {                        // 결과내 정렬 체크 안됨
+            queryBuilder.withSort(Sort.by(Sort.Order.desc("_score")));    // matchScore 기준 정렬
+        }
+        Query query = queryBuilder.build();
+
         SearchHits<Restaurant> searchHits = elasticsearchTemplate.search(query, Restaurant.class);
         List<RestaurantDto> restaurantDtoList = searchHits
                 .getSearchHits()

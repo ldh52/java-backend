@@ -1,6 +1,5 @@
 package com.lion.demo.controller;
 
-import com.lion.demo.entity.Book;
 import com.lion.demo.entity.BookEs;
 import com.lion.demo.entity.BookEsDto;
 import com.lion.demo.service.BookEsService;

@@ -5,10 +5,8 @@ import com.lion.demo.entity.BookEsDto;
 import com.lion.demo.repository.BookEsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.elasticsearch.annotations.Setting;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.query.StringQuery;
@@ -41,9 +39,10 @@ public class BookEsService {
         Sort.Direction direction = sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Query query = NativeQuery.builder()
                 .withQuery(buildMatchQuery(field, keyword))
-                .withSort(Sort.by(direction, sortFieldToUse))
+                .withSort(Sort.by(Sort.Order.desc("_score")))       // 1. matchScore 기준 정렬
+                .withSort(Sort.by(direction, sortFieldToUse))     // 2. titel/author.keyword 기준 정렬
                 .withTrackScores(true)
-                .withPageable(PageRequest.of(page - 1, PAGE_SIZE))
+                .withPageable(pageable)
                 .build();
         SearchHits<BookEs> searchHits = elasticsearchTemplate.search(query, BookEs.class);
         List<BookEsDto> bookEsDtoList = searchHits

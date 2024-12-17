@@ -16,7 +16,8 @@
     function search() {
       const field = document.getElementById('field').value;
       const query = document.getElementById('query').value;
-      const uri = '/restaurant/list?p=1' + '&f=' + field + '&q=' + query;
+      const sortWithinResults = document.getElementById('sortWithinResults').checked;
+      const uri = '/restaurant/list?p=1' + '&f=' + field + '&q=' + query + '&sw=' + sortWithinResults;
       location.href = encodeURI(uri);   // 한글 입력시 인코딩해서 전달
     }
   </script>
@@ -34,7 +35,7 @@
         <main>
           <table class="table table-sm table-borderless">
             <tr>
-              <td style="width: 52%; text-align: left">
+              <td style="width: 36%; text-align: left;">
                 <h3>
                   <strong class="me-5">서울맛집 목록</strong>
                   <span style="font-size: 16px;">
@@ -42,6 +43,15 @@
                   </span>
                 </h3>
               </td>
+              <td style="width: 16%;">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="sortWithinResults" 
+                         onclick="search()" 
+                         th:checked="${sortWithinResults == true}" />
+                  <label class="form-check-label" for="sortWithinResults">결과내 정렬</label>
+                </div>
+              </td>
+              
               <td style="width: 16%">
                 <select class="form-control" id="field">
                   <option value="name" th:selected="${field == 'name'}">상호</option>
@@ -69,7 +79,12 @@
           <table class="table">
             <tr>
               <th style="width: 12%">이미지</th>
-              <th style="width: 28%">상호</th>
+              <th style="width: 28%">
+                상호
+                <a th:href="@{/restaurant/list(p=1,f=${field},q=${query},sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
+                  <i th:classappend="${sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                </a>
+              </th>
               <th style="width: 15%">업소정보 갯수</th>
               <th style="width: 15%">리뷰 갯수</th>
               <th style="width: 15%">평점 평균</th>

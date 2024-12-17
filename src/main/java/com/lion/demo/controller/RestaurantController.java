@@ -1,9 +1,7 @@
 package com.lion.demo.controller;
 
-import com.lion.demo.entity.BookEsDto;
 import com.lion.demo.entity.Restaurant;
 import com.lion.demo.entity.RestaurantDto;
-import com.lion.demo.service.BookEsService;
 import com.lion.demo.service.CsvFileReaderService;
 import com.lion.demo.service.RestaurantService;
 import jakarta.servlet.http.HttpSession;
@@ -28,9 +26,11 @@ public class RestaurantController {
     public String list(@RequestParam(name="p", defaultValue = "1") int page,
                        @RequestParam(name="f", defaultValue = "name") String field,
                        @RequestParam(name="q", defaultValue = "") String query,
+                       @RequestParam(name="sd", defaultValue = "asc") String sortDirection,
+                       @RequestParam(name="sw", defaultValue = "false") boolean sortWithinResults,
                        HttpSession session, Model model) {
 
-        Page<RestaurantDto> pagedResult = restaurantService.getPagedRestaurants(page, field, query);
+        Page<RestaurantDto> pagedResult = restaurantService.getPagedRestaurants(page, field, query, sortDirection, sortWithinResults);
         int totalPages = pagedResult.getTotalPages();
         int startPage = (int) Math.ceil((page - 0.5) / RestaurantService.PAGE_SIZE - 1) * RestaurantService.PAGE_SIZE + 1;
         int endPage = Math.min(startPage + RestaurantService.PAGE_SIZE - 1, totalPages);
@@ -47,6 +47,8 @@ public class RestaurantController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("pageList", pageList);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("sortWithinResults", sortWithinResults);
         return "restaurant/list";
     }
 
