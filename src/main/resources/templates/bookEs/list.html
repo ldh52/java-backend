@@ -52,11 +52,11 @@
               </td>
               <td style="width: 24%">
                 <span th:unless="${query}">
-									<input class="form-control" type="text" id="query" placeholder="검색할 내용" onkeydown="handleEnter(event)">
-								</span>
+                  <input class="form-control" type="text" id="query" placeholder="검색할 내용" onkeydown="handleEnter(event)">
+                </span>
                 <span th:if="${query}">
-									<input class="form-control" type="text" id="query" th:value="${query}" onkeydown="handleEnter(event)">
-								</span>
+                  <input class="form-control" type="text" id="query" th:value="${query}" onkeydown="handleEnter(event)">
+                </span>
               </td>
               <td style="width: 8%">
                 <button class="btn btn-outline-primary" onclick="search()">검색</button>
@@ -69,8 +69,18 @@
           <table class="table">
             <tr>
               <th style="width: 10%">이미지</th>
-              <th style="width: 38%">제목</th>
-              <th style="width: 20%">저자</th>
+              <th style="width: 38%">
+                제목
+                <a th:href="@{/bookEs/list(p=1,f=${field},q=${query},sf='title',sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
+                  <i th:classappend="${sortField == 'title' && sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                </a>
+              </th>
+              <th style="width: 20%">
+                저자
+                <a th:href="@{/bookEs/list(p=1,f=${field},q=${query},sf='author',sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
+                  <i th:classappend="${sortField == 'author' && sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                </a>
+              </th>
               <th style="width: 12%">출판사</th>
               <th style="width: 10%">가격</th>
                 <th style="width: 10%">스코어</th>
@@ -95,32 +105,38 @@
 
           <!-- pagination -->
           <ul class="pagination justify-content-center my-4">
-						<span th:if="${session.currentBookEsPage gt 10}">
-							<li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=${startPage-1},f=${field},q=${query})}"><i class="fa-solid fa-less-than"></i></a></li>
-						</span>
+            <span th:if="${totalPages gt 10}">
+              <li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=1,f=${field},q=${query})}"><i class="fa-solid fa-angles-left"></i></a></li>
+            </span>
+            <span th:if="${session.currentBookEsPage gt 10}">
+              <li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=${startPage-1},f=${field},q=${query})}"><i class="fa-solid fa-angle-left"></i></a></li>
+            </span>
             <span th:if="${session.currentBookEsPage le 10}">
-							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
+            </span>
             <span th:each="page: ${pageList}">
-							<span th:switch="${page}">
-								<th:block th:case="${session.currentBookEsPage}">
-									<li class="page-item active">
-										<a class="page-link" href="#">[[${page}]]</a>
-									</li>
-								</th:block>
-								<th:block th:case="*">
-									<li class="page-item">
-										<a class="page-link" th:href="@{/bookEs/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
-									</li>
-								</th:block>
-							</span>
-						</span>
+              <span th:switch="${page}">
+                <th:block th:case="${session.currentBookEsPage}">
+                  <li class="page-item active">
+                    <a class="page-link" href="#">[[${page}]]</a>
+                  </li>
+                </th:block>
+                <th:block th:case="*">
+                  <li class="page-item">
+                    <a class="page-link" th:href="@{/bookEs/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
+                  </li>
+                </th:block>
+              </span>
+            </span>
             <span th:if="${totalPages gt endPage}">
-							<li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=${endPage+1},f=${field},q=${query})}"><i class="fa-solid fa-greater-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=${endPage+1},f=${field},q=${query})}"><i class="fa-solid fa-angle-right"></i></a></li>
+            </span>
             <span th:if="${totalPages eq endPage}">
-							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
+            </span>
+            <span th:if="${totalPages gt 10}">
+              <li class="page-item"><a class="page-link" th:href="@{/bookEs/list(p=${totalPages},f=${field},q=${query})}"><i class="fa-solid fa-angles-right"></i></a></li>
+            </span>
           </ul>
         </main>
 			</div>

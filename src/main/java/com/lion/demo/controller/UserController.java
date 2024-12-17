@@ -29,15 +29,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerProc(String uid, String pwd, String pwd2, String uname, String email) {
+    public String registerProc(String uid, String pwd, String pwd2, String uname, String email, String profileUrl) {
         if (userService.findByUid(uid) == null && pwd.equals(pwd2) && pwd.length() >= 4) {
             String hashedPwd = BCrypt.hashpw(pwd, BCrypt.gensalt());
             User user = User.builder()
-                    .uid(uid).pwd(hashedPwd).uname(uname).email(email)
-                    .regDate(LocalDate.now())
-                    .role("ROLE_USER")
+                    .uid(uid).pwd(hashedPwd).uname(uname).email(email).profileUrl(profileUrl)
+                    .regDate(LocalDate.now()).role("ROLE_USER").provider("local")
                     .build();
-//            User user = new User(uid, hashedPwd, uname, email, LocalDate.now(), "ROLE_USER");
+
             userService.registerUser(user);
         }
         return "redirect:/user/list";

@@ -1,5 +1,6 @@
 package com.lion.demo.controller;
 
+import com.lion.demo.entity.Book;
 import com.lion.demo.entity.BookEs;
 import com.lion.demo.entity.BookEsDto;
 import com.lion.demo.service.BookEsService;
@@ -24,9 +25,11 @@ public class BookEsController {
     public String list(@RequestParam(name="p", defaultValue = "1") int page,
                        @RequestParam(name="f", defaultValue = "title") String field,
                        @RequestParam(name="q", defaultValue = "") String query,
+                       @RequestParam(name="sf", defaultValue = "title") String sortField,
+                       @RequestParam(name="sd", defaultValue = "asc") String sortDirection,
                        HttpSession session, Model model) {
 
-        Page<BookEsDto> pagedResult = bookEsService.getPagedBooks(page, field, query);
+        Page<BookEsDto> pagedResult = bookEsService.getPagedBooks(page, field, query, sortField, sortDirection);
         int totalPages = pagedResult.getTotalPages();
         int startPage = (int) Math.ceil((page - 0.5) / BookEsService.PAGE_SIZE - 1) * BookEsService.PAGE_SIZE + 1;
         int endPage = Math.min(startPage + BookEsService.PAGE_SIZE - 1, totalPages);
@@ -43,6 +46,8 @@ public class BookEsController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("pageList", pageList);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
         return "bookEs/list";
     }
 
@@ -60,8 +65,26 @@ public class BookEsController {
         return "bookEs/detail";
     }
 
+    @GetMapping("/insert")
+    public String insertForm() {
+        return "bookEs/insert";
+    }
 
+    @PostMapping("/insert")
+    public String insertProc(BookEs b) {
+        BookEs bookEs = BookEs.builder()
+                .title(b.getTitle()).author(b.getAuthor()).company(b.getCompany())
+                .price(b.getPrice()).imageUrl(b.getImageUrl()).summary(b.getSummary())
+                .build();
+        bookEsService.insertBookEs(bookEs);
+        return "redirect:/bookEs/list";
+    }
 
+    @GetMapping("/delete/{bookId}")
+    public String delete(@PathVariable String bookId) {
+        bookEsService.deleteBookEs(bookId);
+        return "redirect:/bookEs/list";
+    }
 
     @GetMapping("/yes24")
     @ResponseBody
