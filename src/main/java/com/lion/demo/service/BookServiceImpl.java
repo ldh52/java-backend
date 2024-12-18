@@ -22,14 +22,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getBooksByPage(int page) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page - 1, ROW_SIZE_PER_PAGE);
         Page<Book> bookPage = bookRepository.findAll(pageable);
         return bookPage.getContent();
     }
 
     @Override
     public List<Book> getBookList(int page, String field, String query) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page - 1, ROW_SIZE_PER_PAGE);
         Page<Book> bookPage = null;
         if (field.equals("title"))
             bookPage = bookRepository.findByTitleContaining(query, pageable);
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<Book> getPagedBooks(int page, String field, String query) {
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page - 1, ROW_SIZE_PER_PAGE);
         Page<Book> bookPage = null;
         if (field.equals("title"))
             bookPage = bookRepository.findByTitleContaining(query, pageable);

@@ -25,7 +25,6 @@ public class BookController {
                        @RequestParam(name="q", defaultValue = "") String query,
                        HttpSession session, Model model) {
 
-//        List<Book> bookList = bookService.getBookList(page, field, query);
         Page<Book> pagedResult = bookService.getPagedBooks(page, field, query);
         int totalPages = pagedResult.getTotalPages();
         int startPage = (int) Math.ceil((page - 0.5) / BookService.PAGE_SIZE - 1) * BookService.PAGE_SIZE + 1;

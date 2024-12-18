@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface BookService {
-    public static final int PAGE_SIZE = 8;
+    public static final int ROW_SIZE_PER_PAGE = 8;
+    public static final int PAGE_SIZE = 10;
 
     Book findByBid(long bid);
 
