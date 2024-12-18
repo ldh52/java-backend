@@ -82,7 +82,7 @@
               <th style="width: 28%">
                 상호
                 <a th:href="@{/restaurant/list(p=1,f=${field},q=${query},sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
-                  <i th:classappend="${sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                  <i th:classappend="${sortDirection == 'asc' ? 'fa-solid fa-sort-down' : 'fa-solid fa-sort-up'}"></i>
                 </a>
               </th>
               <th style="width: 15%">업소정보 갯수</th>

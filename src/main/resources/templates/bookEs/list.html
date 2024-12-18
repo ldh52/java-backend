@@ -72,13 +72,13 @@
               <th style="width: 38%">
                 제목
                 <a th:href="@{/bookEs/list(p=1,f=${field},q=${query},sf='title',sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
-                  <i th:classappend="${sortField == 'title' && sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                  <i th:classappend="${sortField == 'title' && sortDirection == 'asc' ? 'fa-solid fa-sort-down' : 'fa-solid fa-sort-up'}"></i>
                 </a>
               </th>
               <th style="width: 20%">
                 저자
                 <a th:href="@{/bookEs/list(p=1,f=${field},q=${query},sf='author',sd=${sortDirection == 'asc' ? 'desc' : 'asc'})}">
-                  <i th:classappend="${sortField == 'author' && sortDirection == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></i>
+                  <i th:classappend="${sortField == 'author' && sortDirection == 'asc' ? 'fa-solid fa-sort-down' : 'fa-solid fa-sort-up'}"></i>
                 </a>
               </th>
               <th style="width: 12%">출판사</th>

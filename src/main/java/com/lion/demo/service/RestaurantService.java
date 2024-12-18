@@ -30,6 +30,10 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
+    public void deleteRestaurant(String id) {
+        restaurantRepository.deleteById(id);
+    }
+
     public Page<RestaurantDto> getPagedRestaurants(int page, String field, String keyword, String sortDirection,
                                                    boolean sortWithinResults) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
@@ -76,6 +80,7 @@ public class RestaurantService {
             return new StringQuery("{\"match_all\": {}}");
         }
         if (field.equals("info")) {
+            // multi-line string, text block - Java 15부터 가능
             queryString = String.format("""
                         {
                             "multi_match": {
