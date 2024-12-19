@@ -49,3 +49,13 @@ function updateCart(cid, quantity) {
     })
     .catch(error => console.error("Error:", error));
 }
+
+function openPostcodePopup() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            const address = data.roadAddress ? data.roadAddress : data.jibunAddress;
+            document.getElementById('postcode').value = data.zonecode;
+            document.getElementById('address').value = address;
+        }
+    }).open();
+}
