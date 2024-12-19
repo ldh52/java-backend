@@ -6,17 +6,7 @@
     td, th { text-align: center; }
     .text-right { text-align: right; }
   </style>
-  <script>
-    function handleMinus(cid, quantity) {
-      console.log(cid, quantity);
-    }
-    function handlePlus(cid, quantity) {
-      console.log(cid, quantity);
-    }
-    function handleTrash(cid) {
-      console.log(cid);
-    }
-  </script>
+  <script src="/js/cart.js"></script>
 </head>
 <body>
   <div th:insert="~{fragments/base :: top}"></div>
@@ -39,25 +29,26 @@
               <th style="width: 20%;">수량</th>
               <th style="width: 10%;">소계</th>
             </tr>
-            <tr th:each="cartDto: ${cartDtoList}" style="vertical-align: middle;">
+            <!-- <tr th:each="cartDto: ${cartDtoList}" style="vertical-align: middle;"> -->
+            <tr th:each="cartDto: ${cartDtoList}" th:attr="data-cid=${cartDto.cid}" style="vertical-align: middle;">
               <td style="text-align: center;">
                   <img th:src="${cartDto.imageUrl}" alt="${cartDto.title}" height="60">
               </td>
               <td style="text-align: left;" th:text="${cartDto.title}">제목</td>
               <td style="text-align: right;" th:text="${#numbers.formatInteger(cartDto.price, 0, 'COMMA')}">20000</td>
               <td>
-                <a href="#" th:onclick="handleMinus([[${cartDto.cid}]], [[${cartDto.quantity}]])">
+                <a href="#" th:onclick="handleMinus([[${cartDto.cid}]])">
                   <i class="fa-solid fa-circle-minus me-2"></i>
                 </a>
-                <span th:text="${cartDto.quantity}">2</span>
-                <a href="#" th:onclick="handlePlus([[${cartDto.cid}]], [[${cartDto.quantity}]])">
+                <span class="cart-quantity" th:text="${cartDto.quantity}">2</span>
+                <a href="#" th:onclick="handlePlus([[${cartDto.cid}]])">
                   <i class="fa-solid fa-circle-plus ms-2"></i>
                 </a>
                 <a href="#" th:onclick="handleTrash([[${cartDto.cid}]])">
                   <i class="fa-solid fa-trash ms-2"></i>
                 </a>
               </td>
-              <td style="text-align: right;" th:text="${#numbers.formatInteger(cartDto.subTotal, 0, 'COMMA')}">40000</td>
+              <td class="cart-subtotal" style="text-align: right;" th:text="${#numbers.formatInteger(cartDto.subTotal, 0, 'COMMA')}">40000</td>
             </tr>
           </table>
           <div class="row align-items-center my-2">

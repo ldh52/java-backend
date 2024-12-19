@@ -110,4 +110,39 @@ public class MallController {
         model.addAttribute("totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost);
         return "mall/cart";
     }
+
+    @ResponseBody
+    @PostMapping("/updateCart")
+    public Map<String, Object> updateCart(@RequestBody Map<String, Object> payload, HttpSession session) {
+        String uid = (String) session.getAttribute("sessUid");
+        long cid = Long.parseLong(payload.get("cid").toString());
+        int quantity = Integer.parseInt(payload.get("quantity").toString());
+//        System.out.println("======updateCart(): cid=" + cid + ", quantity=" + quantity);
+
+        int subTotal = 0;
+        if (quantity == 0) {
+            cartService.removeFromCart(cid);
+        } else {
+            Cart cart = cartService.findById(cid);
+            cart.setQuantity(quantity);
+            cartService.updateCart(cart);
+            subTotal = cart.getBook().getPrice() * quantity;
+        }
+
+        List<Cart> cartList = cartService.getCartItemsByUser(uid);
+        int totalPrice = 0;
+        for (Cart cart: cartList) {
+            totalPrice += cart.getBook().getPrice() * cart.getQuantity();
+        }
+        int deliveryCost = 3000;
+        int totalPriceIncludingDeliveryCost = totalPrice + deliveryCost;
+
+        return Map.of(
+            "success", true,
+            "subTotal", subTotal,
+            "totalPrice", totalPrice,
+            "deliveryCost", deliveryCost,
+            "totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost
+        );
+    }
 }

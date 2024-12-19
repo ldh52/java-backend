@@ -18,6 +18,11 @@ public class CartServiceImpl implements CartService {
     @Autowired private UserRepository userRepository;
 
     @Override
+    public Cart findById(long cid) {
+        return cartRepository.findById(cid).orElse(null);
+    }
+
+    @Override
     public List<Cart> getCartItemsByUser(String uid) {
         return cartRepository.findByUserUid(uid);
     }
@@ -34,6 +39,11 @@ public class CartServiceImpl implements CartService {
         } else {
             throw new RuntimeException("User or Book not found.");
         }
+    }
+
+    @Override
+    public void updateCart(Cart cart) {
+        cartRepository.save(cart);
     }
 
     @Override
