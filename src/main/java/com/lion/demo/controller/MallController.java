@@ -2,6 +2,7 @@ package com.lion.demo.controller;
 
 import com.lion.demo.entity.Book;
 import com.lion.demo.entity.Cart;
+import com.lion.demo.entity.CartDto;
 import com.lion.demo.service.BookService;
 import com.lion.demo.service.CartService;
 import com.lion.demo.service.UserService;
@@ -62,7 +63,7 @@ public class MallController {
         return "mall/detail";
     }
 
-    @PostMapping("/addItemToCart")
+    @PostMapping("/addItemToCart")      // /mall/detail 화면에서 카트에 담기를 눌렀을 때
     public String addItemToCart(long bid, int quantity, HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
         if (quantity > 0)
@@ -70,14 +71,14 @@ public class MallController {
         return "redirect:/mall/list";
     }
 
-    @PostMapping("/addToCart")
-    public String addToCart(@RequestBody Map<String, Object> requestData, HttpSession session) {
+    @ResponseBody
+    @PostMapping("/addToCart")      // /mall/list 화면에서 카트에 담기를 눌렀을 때
+    public String addToCart(String bid, HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
-        long bid = Long.parseLong(requestData.get("bid").toString());
-        int quantity = Integer.parseInt(requestData.get("quantity").toString());
-        if (quantity > 0)
-            cartService.addToCart(uid, bid, quantity);
-        return "redirect:/mall/list";
+        cartService.addToCart(uid, Long.parseLong(bid), 1);
+        List<Cart> cartList = cartService.getCartItemsByUser(uid);
+        int cartCount = cartList.size();
+        return "" + cartCount;
     }
 
     @GetMapping("/cart")
@@ -85,11 +86,28 @@ public class MallController {
         String uid = (String) session.getAttribute("sessUid");
         List<Cart> cartList = cartService.getCartItemsByUser(uid);
         int totalPrice = 0;
+        List<CartDto> cartDtoList = new ArrayList<>();
         for (Cart cart: cartList) {
-            totalPrice += cart.getBook().getPrice() * cart.getQuantity();
+            int subTotal = cart.getBook().getPrice() * cart.getQuantity();
+            totalPrice += subTotal;
+            CartDto cartDto = CartDto.builder()
+                    .cid(cart.getCid())
+                    .title(cart.getBook().getTitle())
+                    .imageUrl(cart.getBook().getImageUrl())
+                    .price(cart.getBook().getPrice())
+                    .quantity(cart.getQuantity())
+                    .subTotal(subTotal)
+                    .build();
+            cartDtoList.add(cartDto);
         }
+        int deliveryCost = 3000;
+        int totalPriceIncludingDeliveryCost = totalPrice + deliveryCost;
+
         model.addAttribute("cartList", cartList);
+        model.addAttribute("cartDtoList", cartDtoList);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("deliveryCost", deliveryCost);
+        model.addAttribute("totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost);
         return "mall/cart";
     }
 }

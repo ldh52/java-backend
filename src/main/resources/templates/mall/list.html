@@ -21,19 +21,14 @@
       location.href = encodeURI(uri);   // 한글 입력시 인코딩해서 전달
     }
     function addToCart(bid) {
-      const data = {bid, quantity:1};
-      fetch('/mall/addToCart', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-      }).then(response => {
-        if (response.ok) {
-          console.log('Item added to cart successfully');
-        } else {
-          console.error('Failed to add item to cart');
+      $.ajax({
+        type: 'POST',
+        url: '/mall/addToCart',
+        data: {bid: ''+bid},
+        success: function(count) {
+          alert('카트에 성공적으로 담았습니다.');
+          $('#cartCount').attr({'class': 'cart-count'}).html(count);
         }
-      }).catch(error => {
-        console.error('Error:', error);
       });
     }
   </script>
@@ -56,9 +51,7 @@
                   <strong class="me-5">도서 쇼핑</strong>
                   <span style="font-size: 16px;">
                     <a href="/mall/cart"><i class="fa-solid fa-cart-shopping"></i> 카트 보기</a>
-                    <span th:if="${cartCount ge 1}">
-                      <span class="cart-count" th:text="${cartCount}">2</span>
-                    </span>
+                    <span id="cartCount" class="cart-count" th:classappend="${cartCount eq 0 ? 'd-none': ''}" th:text="${cartCount}">2</span>
                   </span>
                 </h3>
               </td>
