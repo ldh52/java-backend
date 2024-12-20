@@ -59,3 +59,30 @@ function openPostcodePopup() {
         }
     }).open();
 }
+
+function handleOrder() {
+    const clientKey = document.getElementById("TOSS_CLIENT_KEY").value;     // Toss Payments Client Key (테스트 키)
+    const orderId = "ORDER_" + new Date().getTime(); // 고유 주문 ID
+    const totalAmount = document.getElementById("totalPriceIncludingDeliveryCost").value.replace(/,/g, ""); // 총 결제 금액
+    const customerName = "홍길동"; // 사용자 이름 (동적으로 변경 가능)
+    const successUrl = "http://localhost:8090/payment/success";     // 성공시 리다이렉트 URL
+    const failureUrl = "http://localhost:8090/payment/failure";     // 실패시 리다이렉트 URL
+
+    // Toss Payments 위젯 실행
+    TossPayments(clientKey)
+        .requestPayment('카드', {
+            amount: parseInt(totalAmount),
+            orderId: orderId,
+            orderName: "장바구니 상품 결제",
+            customerName: customerName,
+            successUrl: successUrl,
+            failUrl: failureUrl
+        })
+        .catch(function (error) {
+            if (error.code === 'USER_CANCEL') {
+                alert('결제가 취소되었습니다.');
+            } else {
+                alert('결제 중 오류가 발생했습니다: ' + error.message);
+            }
+        });
+}

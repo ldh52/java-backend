@@ -8,6 +8,7 @@ import com.lion.demo.service.CartService;
 import com.lion.demo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class MallController {
     @Autowired private CartService cartService;
     @Autowired private BookService bookService;
     @Autowired private UserService userService;
+    @Value("${toss.payment.client.key}") private String TOSS_CLIENT_KEY;
 
     @GetMapping("/list")
     public String list(@RequestParam(name="p", defaultValue = "1") int page,
@@ -108,6 +110,7 @@ public class MallController {
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("deliveryCost", deliveryCost);
         model.addAttribute("totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost);
+        model.addAttribute("TOSS_CLIENT_KEY", TOSS_CLIENT_KEY);
         return "mall/cart";
     }
 

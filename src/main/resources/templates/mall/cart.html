@@ -7,16 +7,17 @@
     .text-right { text-align: right; }
   </style>
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script src="https://js.tosspayments.com/v1"></script>
   <script src="/js/cart.js"></script>
 </head>
 <body>
   <div th:insert="~{fragments/base :: top}"></div>
 
   <div class="container" style="margin-top:80px">
-		<div class="row">
-			<div class="col-3">
+    <div class="row">
+      <div class="col-3">
         <aside th:replace="~{fragments/base :: aside('/img/shopping.png')}"></aside>
-			</div>
+      </div>
 
       <div class="col-9">
         <main>
@@ -101,17 +102,19 @@
             <div class="col-8">
               <label for="delivery-memo" class="form-label">배송메모*</label>
               <select name="deliveryMemo" id="delivery-memo" class="form-control">
-                <option value="option1" selected>문앞에 놓아주세요.</option>
-                <option value="option2">부재시 연락 부탁드려요.</option>
-                <option value="option3">배송전 미리 연락해주세요.</option>
-                <option value="option4">부재시 1층 택배 보관장소에 맡겨주세요.</option>
+                <option value="option1" selected>선택 안함.</option>
+                <option value="option2">문앞에 놓아주세요.</option>
+                <option value="option3">부재시 연락 부탁드려요.</option>
+                <option value="option4">배송전 미리 연락해주세요.</option>
+                <option value="option5">부재시 1층 택배 보관장소에 맡겨주세요.</option>
               </select>
             </div>
             <div class="col-2"></div>
           </div>
+          <input type="hidden" id="TOSS_CLIENT_KEY" th:value="${TOSS_CLIENT_KEY}">
 
           <div class="text-center mt-3">
-            <button type="button" class="btn btn-primary" onclick="location.href='/order/createOrder'">주문하기</button>
+            <button type="button" class="btn btn-primary" onclick="handleOrder()">주문하기</button>
             <button type="button" class="btn btn-outline-secondary ms-2" onclick="location.href='/mall/list'">쇼핑하기</button>
           </div>
         </main>
