@@ -21,11 +21,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment) {
+    public Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment, DeliveryAddress address) {
         User user = userRepository.findById(uid).orElse(null);
         Order order = Order.builder()
                 .user(user).orderDateTime(LocalDateTime.now())
                 .tossPayment(tossPayment)
+                .deliveryAddress(address)
                 .build();
 
         int totalAmount = 0;

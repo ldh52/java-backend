@@ -6,12 +6,10 @@ import com.lion.demo.entity.*;
 import com.lion.demo.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,17 +22,20 @@ import java.util.Map;
 public class OrderController {
     @Autowired private BookService bookService;
     @Autowired private CartService cartService;
+    @Autowired private DeliveryAddressService deliveryAddressService;
     @Autowired private OrderService orderService;
     @Autowired private TossPaymentService tossPaymentService;
     @Autowired private UserService userService;
 
     @GetMapping("/createOrder")
-    public String createOrder(@RequestParam String pid, HttpSession session) {
+    public String createOrder(@RequestParam String pid,
+                              @RequestParam Long did, HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
         TossPayment tossPayment = tossPaymentService.findById(pid);
+        DeliveryAddress deliveryAddress = deliveryAddressService.findById(did);
         List<Cart> cartList = cartService.getCartItemsByUser(uid);
         if (cartList.size() != 0) {
-            Order order = orderService.createOrder(uid, cartList, tossPayment);
+            Order order = orderService.createOrder(uid, cartList, tossPayment, deliveryAddress);
         }
         return "redirect:/order/list";
     }
@@ -52,6 +53,7 @@ public class OrderController {
                 title += " 외 " + (size - 1) + " 건";
             orderTitleList.add(title);
         }
+        session.setAttribute("menu", "order");
         model.addAttribute("orderList", orderList);
         model.addAttribute("orderTitleList", orderTitleList);
         return "order/list";
@@ -59,7 +61,7 @@ public class OrderController {
 
     @GetMapping("/listAll")
     @CheckPermission("ROLE_ADMIN")
-    public String listAll(Model model) {
+    public String listAll(HttpSession session, Model model) {
         // 2024년 12월
         LocalDateTime startTime = LocalDateTime.of(2024, 12, 1, 0, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, 12, 31, 23, 59, 59, 999999999);
@@ -77,6 +79,7 @@ public class OrderController {
                 title += " 외 " + (size - 1) + " 건";
             orderTitleList.add(title);
         }
+        session.setAttribute("menu", "order");
         model.addAttribute("orderList", orderList);
         model.addAttribute("orderTitleList", orderTitleList);
         model.addAttribute("totalRevenue", totalRevenue);
@@ -86,7 +89,7 @@ public class OrderController {
 
     @GetMapping("/bookStat")
     @LogExecutionTime
-    public String bookStat(Model model) {
+    public String bookStat(HttpSession session, Model model) {
         // 2024년 12월
         LocalDateTime startTime = LocalDateTime.of(2024, 12, 1, 0, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, 12, 31, 23, 59, 59, 999999999);
@@ -120,8 +123,19 @@ public class OrderController {
             bookStat.setTotalPrice(bookStat.getUnitPrice() * bookStat.getQuantity());
             bookStatList.add(bookStat);
         }
+        session.setAttribute("menu", "order");
         model.addAttribute("bookStatList", bookStatList);
         return "order/bookStat";
+    }
+
+    @PostMapping("/saveDeliveryAddress")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> saveDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress) {
+        deliveryAddress = deliveryAddressService.insertDeliveryAddress(deliveryAddress);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "배송지가 저장되었습니다.");
+        response.put("id", deliveryAddress.getId());
+        return ResponseEntity.ok(response);
     }
 
 }

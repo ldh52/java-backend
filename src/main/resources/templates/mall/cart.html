@@ -9,6 +9,12 @@
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script src="https://js.tosspayments.com/v1"></script>
   <script src="/js/cart.js"></script>
+  <script>
+    window.onload = () => {
+      const telInput = document.getElementById("tel");
+      telInput.addEventListener("input", handleTelNumber);
+    }
+  </script>
 </head>
 <body>
   <div th:insert="~{fragments/base :: top}"></div>
@@ -81,8 +87,12 @@
                 </div>
               </div>
               <div class="mt-3">
+                <label for="recipient-name" class="form-label">받는분 이름*</label>
+                <input id="recipient-name" class="form-control" type="text" th:value="${session.sessUname}">
+              </div>
+              <div class="mt-3">
                 <label for="tel" class="form-label">전화번호*</label>
-                <input id="tel" class="form-control" type="text">
+                <input id="tel" class="form-control" type="text" placeholder="숫자만 입력하세요." maxlength="13">
               </div>
             </div>
             <div class="col-5">
@@ -94,20 +104,16 @@
                 <label for="detail-address" class="form-label">상세주소*</label>
                 <input id="detail-address" class="form-control" type="text">
               </div>
-            </div>
-            <div class="col-2"></div>
-          </div>
-          <div class="row">
-            <div class="col-2"></div>
-            <div class="col-8">
-              <label for="delivery-memo" class="form-label">배송메모*</label>
-              <select name="deliveryMemo" id="delivery-memo" class="form-control">
-                <option value="option1" selected>선택 안함.</option>
-                <option value="option2">문앞에 놓아주세요.</option>
-                <option value="option3">부재시 연락 부탁드려요.</option>
-                <option value="option4">배송전 미리 연락해주세요.</option>
-                <option value="option5">부재시 1층 택배 보관장소에 맡겨주세요.</option>
-              </select>
+              <div class="mt-3">
+                <label for="delivery-memo" class="form-label">배송메모*</label>
+                <select id="delivery-memo" class="form-control">
+                  <option value="선택 안함." selected>선택 안함.</option>
+                  <option value="문앞에 놓아주세요.">문앞에 놓아주세요.</option>
+                  <option value="부재시 연락 부탁드려요.">부재시 연락 부탁드려요.</option>
+                  <option value="배송전 미리 연락해주세요.">배송전 미리 연락해주세요.</option>
+                  <option value="1층 택배 보관장소에 맡겨주세요.">1층 택배 보관장소에 맡겨주세요.</option>
+                </select>
+              </div>
             </div>
             <div class="col-2"></div>
           </div>

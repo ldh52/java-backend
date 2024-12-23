@@ -35,6 +35,10 @@ public class Order {
     @JoinColumn(name = "pid", referencedColumnName = "id")
     private TossPayment tossPayment;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "did", referencedColumnName = "id")
+    private DeliveryAddress deliveryAddress;
+
     // 연관관계 메소드 추가
     public void addOrderItem(OrderItem orderItem) {
         if (this.orderItems == null)

@@ -43,6 +43,17 @@
             <li class="nav-item ms-3">
               <a class="nav-link" th:classappend="${session.menu eq 'mall' ? 'active' : ''}" href="/mall/list"><i class="fa-solid fa-basket-shopping"></i> 쇼핑</a>
             </li>
+            <li class="nav-item dropdown ms-3">
+              <a class="nav-link dropdown-toggle" th:classappend="${session.menu eq 'order' ? 'active' : ''}" href="#" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-bag-shopping"></i> 주문
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/order/list">주문 목록</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                <li><a class="dropdown-item" href="/order/listAll">총괄 주문목록</a></li>
+                <li><a class="dropdown-item" href="/order/bookStat">주문 통계</a></li>
+              </ul>
+            </li>
             <li class="nav-item ms-3">
               <a class="nav-link" th:classappend="${session.menu eq 'user' ? 'active' : ''}" href="/user/list"><i class="fas fa-user-friends"></i> 사용자</a>
             </li>
