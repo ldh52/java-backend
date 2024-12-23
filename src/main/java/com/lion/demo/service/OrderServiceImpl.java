@@ -1,9 +1,6 @@
 package com.lion.demo.service;
 
-import com.lion.demo.entity.Cart;
-import com.lion.demo.entity.Order;
-import com.lion.demo.entity.OrderItem;
-import com.lion.demo.entity.User;
+import com.lion.demo.entity.*;
 import com.lion.demo.repository.BookRepository;
 import com.lion.demo.repository.CartRepository;
 import com.lion.demo.repository.OrderRepository;
@@ -24,10 +21,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(String uid, List<Cart> cartList) {
+    public Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment) {
         User user = userRepository.findById(uid).orElse(null);
         Order order = Order.builder()
                 .user(user).orderDateTime(LocalDateTime.now())
+                .tossPayment(tossPayment)
                 .build();
 
         int totalAmount = 0;
@@ -48,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getOrdersByUser(String uid) {
-        return orderRepository.findByUserUid(uid);
+        return orderRepository.findByUserUidOrderByOidDesc(uid);
     }
 
     @Override

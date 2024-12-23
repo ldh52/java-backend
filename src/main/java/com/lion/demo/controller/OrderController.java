@@ -25,14 +25,16 @@ public class OrderController {
     @Autowired private BookService bookService;
     @Autowired private CartService cartService;
     @Autowired private OrderService orderService;
+    @Autowired private TossPaymentService tossPaymentService;
     @Autowired private UserService userService;
 
     @GetMapping("/createOrder")
-    public String createOrder(HttpSession session) {
+    public String createOrder(@RequestParam String pid, HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
+        TossPayment tossPayment = tossPaymentService.findById(pid);
         List<Cart> cartList = cartService.getCartItemsByUser(uid);
         if (cartList.size() != 0) {
-            Order order = orderService.createOrder(uid, cartList);
+            Order order = orderService.createOrder(uid, cartList, tossPayment);
         }
         return "redirect:/order/list";
     }

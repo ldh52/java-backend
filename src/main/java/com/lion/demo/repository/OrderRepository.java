@@ -9,6 +9,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     // 개별 사용자
     List<Order> findByUserUid(String uid);
+    List<Order> findByUserUidOrderByOidDesc(String uid);
 
     // 관리자 - 기간 설정
     List<Order> findByOrderDateTimeBetween(LocalDateTime start, LocalDateTime end);

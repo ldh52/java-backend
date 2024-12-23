@@ -112,6 +112,7 @@
             <div class="col-2"></div>
           </div>
           <input type="hidden" id="TOSS_CLIENT_KEY" th:value="${TOSS_CLIENT_KEY}">
+          <input type="hidden" id="uid" th:value="${session.sessUid}">
 
           <div class="text-center mt-3">
             <button type="button" class="btn btn-primary" onclick="handleOrder()">주문하기</button>

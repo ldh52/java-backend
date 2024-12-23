@@ -31,6 +31,10 @@ public class Order {
     private LocalDateTime orderDateTime;
     private int totalAmount;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pid", referencedColumnName = "id")
+    private TossPayment tossPayment;
+
     // 연관관계 메소드 추가
     public void addOrderItem(OrderItem orderItem) {
         if (this.orderItems == null)

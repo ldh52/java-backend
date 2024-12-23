@@ -1,6 +1,8 @@
 package com.lion.demo.service;
 
 import com.lion.demo.entity.PaymentApproveRequest;
+import com.lion.demo.entity.TossPayment;
+import com.lion.demo.repository.TossPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import java.util.Map;
 @Service
 public class TossPaymentService {
     @Autowired private RestTemplate restTemplate;
+    @Autowired private TossPaymentRepository tossPaymentRepository;
     @Value("${toss.payment.secret.key}") private String SECRET_KEY;
     private final String API_URL = "https://api.tosspayments.com/v1/payments/confirm";
 
@@ -45,5 +48,13 @@ public class TossPaymentService {
             System.err.println("알 수 없는 오류 발생: " + e.getMessage());
             throw new RuntimeException("결제 승인 중 예기치 못한 오류가 발생했습니다.");
         }
+    }
+
+    public void insertTossPayment(TossPayment tossPayment) {
+        tossPaymentRepository.save(tossPayment);
+    }
+
+    public TossPayment findById(String id) {
+        return tossPaymentRepository.findById(id).orElse(null);
     }
 }

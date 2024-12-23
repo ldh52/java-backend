@@ -2,12 +2,13 @@ package com.lion.demo.service;
 
 import com.lion.demo.entity.Cart;
 import com.lion.demo.entity.Order;
+import com.lion.demo.entity.TossPayment;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
-    Order createOrder(String uid, List<Cart> cartList);
+    Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment);
 
     List<Order> getOrdersByUser(String uid);
 

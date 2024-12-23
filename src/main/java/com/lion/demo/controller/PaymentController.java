@@ -1,12 +1,18 @@
 package com.lion.demo.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lion.demo.entity.PaymentApproveRequest;
+import com.lion.demo.entity.TossPayment;
 import com.lion.demo.service.TossPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/payment")
@@ -21,9 +27,22 @@ public class PaymentController {
         PaymentApproveRequest request = new PaymentApproveRequest(paymentKey, orderId, Long.parseLong(amount));
         System.out.println("===== 결제 승인 요청 데이터: " + request);
         try {
-            String result = tossPaymentService.approvePayment(request);
+            String jsonResult = tossPaymentService.approvePayment(request);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> result = objectMapper.readValue(jsonResult, new TypeReference<Map<String, Object>>() { });
             System.out.println("결제 승인 성공: " + result);
-            return "redirect:/order/createOrder";
+            TossPayment tossPayment = TossPayment.builder()
+                    .id((String) result.get("orderId"))
+                    .paymentKey((String) result.get("paymentKey"))
+                    .name((String) result.get("orderName"))
+                    .status((String) result.get("status"))
+                    .approvalTime(OffsetDateTime.parse((String) result.get("approvedAt")).toLocalDateTime())
+                    .paymentType(result.get("card") != null ? "card" : "other")
+                    .totalPayment((int) result.get("totalAmount"))
+                    .version((String) result.get("version"))
+                    .build();
+            tossPaymentService.insertTossPayment(tossPayment);
+            return "redirect:/order/createOrder?pid=" + result.get("orderId");
         } catch (Exception e) {
             System.out.println("결제 승인중 오류 발생: " + e.getMessage());
             return "redirect:/mall/cart";
