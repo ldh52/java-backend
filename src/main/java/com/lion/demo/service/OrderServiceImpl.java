@@ -21,12 +21,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment, DeliveryAddress address) {
+    public Order createOrder(String uid, List<Cart> cartList, TossPayment tossPayment, DeliveryInfo address) {
         User user = userRepository.findById(uid).orElse(null);
         Order order = Order.builder()
                 .user(user).orderDateTime(LocalDateTime.now())
                 .tossPayment(tossPayment)
-                .deliveryAddress(address)
+                .deliveryInfo(address)
                 .build();
 
         int totalAmount = 0;
@@ -53,5 +53,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrdersByDateRange(LocalDateTime start, LocalDateTime end) {
         return orderRepository.findByOrderDateTimeBetween(start, end);
+    }
+
+    @Override
+    public Order findById(long oid) {
+        return orderRepository.findById(oid).orElse(null);
     }
 }

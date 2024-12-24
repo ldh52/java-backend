@@ -22,7 +22,7 @@ import java.util.Map;
 public class OrderController {
     @Autowired private BookService bookService;
     @Autowired private CartService cartService;
-    @Autowired private DeliveryAddressService deliveryAddressService;
+    @Autowired private DeliveryInfoService deliveryInfoService;
     @Autowired private OrderService orderService;
     @Autowired private TossPaymentService tossPaymentService;
     @Autowired private UserService userService;
@@ -32,10 +32,10 @@ public class OrderController {
                               @RequestParam Long did, HttpSession session) {
         String uid = (String) session.getAttribute("sessUid");
         TossPayment tossPayment = tossPaymentService.findById(pid);
-        DeliveryAddress deliveryAddress = deliveryAddressService.findById(did);
+        DeliveryInfo deliveryInfo = deliveryInfoService.findById(did);
         List<Cart> cartList = cartService.getCartItemsByUser(uid);
         if (cartList.size() != 0) {
-            Order order = orderService.createOrder(uid, cartList, tossPayment, deliveryAddress);
+            Order order = orderService.createOrder(uid, cartList, tossPayment, deliveryInfo);
         }
         return "redirect:/order/list";
     }
@@ -128,14 +128,20 @@ public class OrderController {
         return "order/bookStat";
     }
 
-    @PostMapping("/saveDeliveryAddress")
+    @PostMapping("/saveDeliveryInfo")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> saveDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress) {
-        deliveryAddress = deliveryAddressService.insertDeliveryAddress(deliveryAddress);
+    public ResponseEntity<Map<String, Object>> saveDeliveryInfo(@RequestBody DeliveryInfo deliveryInfo) {
+        deliveryInfo = deliveryInfoService.insertDeliveryInfo(deliveryInfo);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "배송지가 저장되었습니다.");
-        response.put("id", deliveryAddress.getId());
+        response.put("id", deliveryInfo.getId());
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/detail/{oid}")
+    public String detail(@PathVariable long oid, Model model) {
+        Order order = orderService.findById(oid);
+        model.addAttribute(order);
+        return "order/detail";
+    }
 }

@@ -25,6 +25,8 @@ public class MallController {
     @Autowired private BookService bookService;
     @Autowired private UserService userService;
     @Value("${toss.payment.client.key}") private String TOSS_CLIENT_KEY;
+    @Value("${server.ip}") private String serverIp;
+    @Value("${server.port}") private String serverPort;
 
     @GetMapping("/list")
     public String list(@RequestParam(name="p", defaultValue = "1") int page,
@@ -102,14 +104,16 @@ public class MallController {
                     .build();
             cartDtoList.add(cartDto);
         }
-        int deliveryCost = 3000;
-        int totalPriceIncludingDeliveryCost = totalPrice + deliveryCost;
+        int deliveryCost = getDeliveryCost(totalPrice);
+        int totalPayment = totalPrice + deliveryCost;
 
+        session.setAttribute("serverIp", serverIp);
+        session.setAttribute("serverPort", serverPort);
         model.addAttribute("cartList", cartList);
         model.addAttribute("cartDtoList", cartDtoList);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("deliveryCost", deliveryCost);
-        model.addAttribute("totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost);
+        model.addAttribute("totalPayment", totalPayment);
         model.addAttribute("TOSS_CLIENT_KEY", TOSS_CLIENT_KEY);
         return "mall/cart";
     }
@@ -137,15 +141,19 @@ public class MallController {
         for (Cart cart: cartList) {
             totalPrice += cart.getBook().getPrice() * cart.getQuantity();
         }
-        int deliveryCost = 3000;
-        int totalPriceIncludingDeliveryCost = totalPrice + deliveryCost;
+        int deliveryCost = getDeliveryCost(totalPrice);
+        int totalPayment = totalPrice + deliveryCost;
 
         return Map.of(
             "success", true,
             "subTotal", subTotal,
             "totalPrice", totalPrice,
             "deliveryCost", deliveryCost,
-            "totalPriceIncludingDeliveryCost", totalPriceIncludingDeliveryCost
+            "totalPayment", totalPayment
         );
+    }
+
+    private int getDeliveryCost(int totalPrice) {
+        return totalPrice >= 60000 ? 0 : 3000;          // 60,000원 이상이면 배송비 무료
     }
 }

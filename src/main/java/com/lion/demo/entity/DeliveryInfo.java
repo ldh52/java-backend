@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeliveryAddress {
+public class DeliveryInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +25,5 @@ public class DeliveryAddress {
     private String detailAddr;
     private String tel;
     private String memo;
+    private int cost;
 }

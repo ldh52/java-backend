@@ -34,7 +34,7 @@ function updateCart(cid, quantity) {
             // UI 업데이트
             document.querySelector('#totalPrice').value = data.totalPrice.toLocaleString();
             document.querySelector('#deliveryCost').value = data.deliveryCost.toLocaleString();
-            document.querySelector('#totalPriceIncludingDeliveryCost').value = data.totalPriceIncludingDeliveryCost.toLocaleString();
+            document.querySelector('#totalPayment').value = data.totalPayment.toLocaleString();
 
             const cartRow = document.querySelector(`[data-cid="${cid}"]`);
             if (quantity === 0) {
@@ -60,31 +60,34 @@ function openPostcodePopup() {
     }).open();
 }
 
-function makeJsonDeliveryAddress() {
+function makeJsonDeliveryInfo() {
     const zipCode = $('#postcode').val();
     const recipientName = $('#recipient-name').val().trim();
     const basicAddr = $('#address').val();
     const detailAddr = $('#detail-address').val().trim();
     const tel = $('#tel').val();
     const memo = $('#delivery-memo').val();
-    return JSON.stringify({zipCode, recipientName, basicAddr, detailAddr, tel, memo});
+    const cost = parseInt($('#deliveryCost').val().replace(/,/g, ''));
+    return JSON.stringify({zipCode, recipientName, basicAddr, detailAddr, tel, memo, cost});
 }
 
 function handleOrder() {
-    const clientKey = document.getElementById("TOSS_CLIENT_KEY").value;     // Toss Payments Client Key (테스트 키)
-    const customerName = document.getElementById("uid").value;
+    const clientKey = $('#TOSS_CLIENT_KEY').val();     // Toss Payments Client Key (테스트 키)
+    const customerName = $('#uid').val();
     const orderId = customerName + '_' + new Date().getTime();      // 고유 주문 ID
-    const totalPayment = document.getElementById("totalPriceIncludingDeliveryCost").value.replace(/,/g, ""); // 총 결제 금액
-    const successUrl = "http://localhost:8090/payment/success";     // 성공시 리다이렉트 URL
-    const failureUrl = "http://localhost:8090/payment/failure";     // 실패시 리다이렉트 URL
-    const deliveryAddress = makeJsonDeliveryAddress();
-    // console.log(deliveryAddress);
+    const serverIp = $('#serverIp').val();
+    const serverPort = $('#serverPort').val();
+    const totalPayment = $('#totalPayment').val().replace(/,/g, '');    // 총 결제 금액
+    const successUrl = `http://${serverIp}:${serverPort}/payment/success`;     // 성공시 리다이렉트 URL
+    const failureUrl = `http://${serverIp}:${serverPort}/payment/failure`;     // 실패시 리다이렉트 URL
+    const deliveryInfo = makeJsonDeliveryInfo();
+    // console.log(deliveryInfo);
 
     // 배송지 서버 전송
-    fetch('/order/saveDeliveryAddress', {
+    fetch('/order/saveDeliveryInfo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: deliveryAddress
+        body: deliveryInfo
     })
     .then(response =>  {
         if (!response.ok) {
