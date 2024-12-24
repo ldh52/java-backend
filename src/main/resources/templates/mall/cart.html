@@ -54,7 +54,7 @@
                   <i class="fa-solid fa-trash ms-2"></i>
                 </a>
               </td>
-              <td class="cart-subtotal" style="text-align: right; width: 10%;" th:text="${#numbers.formatInteger(cartDto.subTotal, 0, 'COMMA')}">40000</td>
+              <td class="cart-subtotal text-right" style="width: 10%;" th:text="${#numbers.formatInteger(cartDto.subTotal, 0, 'COMMA')}">40000</td>
             </tr>
           </table>
           <div class="row align-items-center my-2">
@@ -124,7 +124,7 @@
 
           <div class="text-center mt-3">
             <button type="button" class="btn btn-primary" onclick="handleOrder()">주문하기</button>
-            <button type="button" class="btn btn-outline-secondary ms-2" onclick="location.href='/mall/list'">쇼핑하기</button>
+            <button type="button" class="btn btn-outline-secondary ms-2" onclick="location.href='/mall/list'">쇼핑 계속하기</button>
           </div>
         </main>
       </div>

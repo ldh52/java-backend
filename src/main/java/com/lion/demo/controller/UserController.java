@@ -115,8 +115,9 @@ public class UserController {
         User user = userService.findByUid(uid);
         session.setAttribute("sessUid", uid);
         session.setAttribute("sessUname", user.getUname());
+        session.setMaxInactiveInterval(4 * 60 * 60);        // 세션 타임아웃 시간: 4시간
         String msg = user.getUname() + "님 환영합니다.";
-        String url = "/bookEs/list";
+        String url = "/mall/list";
         model.addAttribute("msg", msg);
         model.addAttribute("url", url);
         return "common/alertMsg";

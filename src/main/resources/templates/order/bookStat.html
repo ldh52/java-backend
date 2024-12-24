@@ -1,40 +1,79 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <header th:replace="~{fragments/base :: head}"></header>
   <style>
-    th, td { padding: 3px; }
+    th, td { text-align: center; }
   </style>
+  <script>
+    function search() {
+      const startDay = $('#startDay').val();
+      const endDay = $('#endDay').val();
+      const uri = `/order/bookStat?s=${startDay}&e=${endDay}`;
+      location.href = uri;
+    }
+  </script>
 </head>
-<body style="margin: 50px;">
-  <h1>도서 판매 통계
-    <span style="font-size: 16px; margin-left: 100px;">
-      <a th:href="@{/order/listAll}">주문목록 보기</a>&nbsp;&nbsp;&nbsp;
-      <a th:href="@{/user/logout}">로그아웃</a>
-    </span>
-  </h1>
-  <hr>
-  <table border="1">
-    <tr>
-      <th>No.</th>
-      <th>Book Id</th>
-      <th>제목</th>
-      <th>출판사</th>
-      <th>단가</th>
-      <th>판매 수량</th>
-      <th>판매 금액</th>
-    </tr>
-    <tr th:each="bs: ${bookStatList}">
-      <td th:text="${bsStat.count}">1</td>
-      <td th:text="${bs.bid}">1</td>
-      <td th:text="${bs.title}">제목</td>
-      <td th:text="${bs.company}">출판사</td>
-      <td th:text="${bs.unitPrice}">단가</td>
-      <td th:text="${bs.quantity}">판매 수량</td>
-      <td th:text="${bs.totalPrice}">판매 금액</td>
-    </tr>
-  </table>
+<body>
+  <div th:insert="~{fragments/base :: top}"></div>
+
+  <div class="container" style="margin-top:80px">
+    <div class="row">
+      <div class="col-3">
+        <aside th:replace="~{fragments/base :: aside('/img/receipt.png')}"></aside>
+      </div>
+
+      <div class="col-9">
+        <main>
+          <table class="table table-sm table-borderless">
+            <tr>
+              <td style="width: 57%; text-align: left">
+                <h3>
+                  <strong class="me-5">도서판매 통계</strong>
+                </h3>
+              </td>
+              <td style="width: 10%">
+                <input class="form-control" type="date" id="startDay" th:value="${startDay}">
+              </td>
+              <td style="width: 5%;">&#126;</td>
+              <td style="width: 10%">
+                <input class="form-control" type="date" id="endDay" th:value="${endDay}">
+              </td>
+              <td style="width: 8%">
+                <button class="btn btn-outline-primary" onclick="search()">검색</button>
+              </td>
+            </tr>
+          </table>
+
+          <hr>
+          <table class="table table-sm" style="font-size: 0.8rem;">
+            <tr>
+              <th>No.</th>
+              <th>Book Id</th>
+              <th>제목</th>
+              <th>출판사</th>
+              <th>단가</th>
+              <th>판매 수량</th>
+              <th>판매 금액</th>
+            </tr>
+            <tr th:each="bs: ${bookStatList}">
+              <td th:text="${bsStat.count}">1</td>
+              <td th:text="${bs.bid}">1</td>
+              <td style="text-align: left;" th:text="${bs.title}">제목</td>
+              <td th:text="${bs.company}">출판사</td>
+              <td style="text-align: right;" th:text="${#numbers.formatInteger(bs.unitPrice, 0, 'COMMA')}">단가</td>
+              <td th:text="${#numbers.formatInteger(bs.quantity, 0, 'COMMA')}">판매 수량</td>
+              <td style="text-align: right;" th:text="${#numbers.formatInteger(bs.totalPrice, 0, 'COMMA')}">판매 금액</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;" colspan="5">계</td>
+              <td style="font-weight: bold;" th:text="${#numbers.formatInteger(totalBooks, 0, 'COMMA')}">총 판매량</td>
+              <td style="text-align: right; font-weight: bold;" th:text="${#numbers.formatInteger(totalRevenue, 0, 'COMMA')}">총 판매액</td>
+            </tr>
+          </table>
+        </main>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

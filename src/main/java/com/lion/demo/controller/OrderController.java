@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,10 +63,18 @@ public class OrderController {
 
     @GetMapping("/listAll")
     @CheckPermission("ROLE_ADMIN")
-    public String listAll(HttpSession session, Model model) {
-        // 2024년 12월
-        LocalDateTime startTime = LocalDateTime.of(2024, 12, 1, 0, 0);
-        LocalDateTime endTime = LocalDateTime.of(2024, 12, 31, 23, 59, 59, 999999999);
+    public String listAll(@RequestParam(name="s", defaultValue = "") String startDay,
+                          @RequestParam(name="e", defaultValue = "") String endDay,
+                          HttpSession session, Model model) {
+
+        if (startDay.isEmpty() || endDay.isEmpty()) {
+            LocalDate today = LocalDate.now();
+            startDay = today.withDayOfMonth(1).toString();
+            endDay = YearMonth.from(today).atEndOfMonth().toString();
+        }
+        LocalDateTime startTime = LocalDate.parse(startDay).atStartOfDay();
+        LocalDateTime endTime = LocalDate.parse(endDay).atTime(23, 59, 59, 999999999);
+
         List<Order> orderList = orderService.getOrdersByDateRange(startTime, endTime);
         int totalRevenue = 0, totalBooks = 0;
         List<String> orderTitleList = new ArrayList<>();
@@ -84,15 +94,24 @@ public class OrderController {
         model.addAttribute("orderTitleList", orderTitleList);
         model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("startDay", startDay);
+        model.addAttribute("endDay", endDay);
         return "order/listAll";
     }
 
     @GetMapping("/bookStat")
     @LogExecutionTime
-    public String bookStat(HttpSession session, Model model) {
-        // 2024년 12월
-        LocalDateTime startTime = LocalDateTime.of(2024, 12, 1, 0, 0);
-        LocalDateTime endTime = LocalDateTime.of(2024, 12, 31, 23, 59, 59, 999999999);
+    public String bookStat(@RequestParam(name="s", defaultValue = "") String startDay,
+                           @RequestParam(name="e", defaultValue = "") String endDay,
+                           HttpSession session, Model model) {
+
+        if (startDay.isEmpty() || endDay.isEmpty()) {
+            LocalDate today = LocalDate.now();
+            startDay = today.withDayOfMonth(1).toString();
+            endDay = YearMonth.from(today).atEndOfMonth().toString();
+        }
+        LocalDateTime startTime = LocalDate.parse(startDay).atStartOfDay();
+        LocalDateTime endTime = LocalDate.parse(endDay).atTime(23, 59, 59, 999999999);
         List<Order> orderList = orderService.getOrdersByDateRange(startTime, endTime);
         Map<Long, BookStat> map = new HashMap<>();
 
@@ -118,13 +137,21 @@ public class OrderController {
         }
 
         List<BookStat> bookStatList = new ArrayList<>();
+        int totalRevenue = 0, totalBooks = 0;
         for (Map.Entry<Long, BookStat> entry: map.entrySet()) {
             BookStat bookStat = entry.getValue();
-            bookStat.setTotalPrice(bookStat.getUnitPrice() * bookStat.getQuantity());
+            int totalPrice = bookStat.getUnitPrice() * bookStat.getQuantity();
+            bookStat.setTotalPrice(totalPrice);
             bookStatList.add(bookStat);
+            totalRevenue += totalPrice;
+            totalBooks += bookStat.getQuantity();
         }
         session.setAttribute("menu", "order");
         model.addAttribute("bookStatList", bookStatList);
+        model.addAttribute("totalRevenue", totalRevenue);
+        model.addAttribute("totalBooks", totalBooks);
+        model.addAttribute("startDay", startDay);
+        model.addAttribute("endDay", endDay);
         return "order/bookStat";
     }
 
