@@ -25,10 +25,10 @@
   <div th:insert="~{fragments/base :: top}"></div>
 
   <div class="container" style="margin-top:80px">
-		<div class="row">
-			<div class="col-3">
+    <div class="row">
+      <div class="col-3">
         <aside th:replace="~{fragments/base :: aside('/img/h2-logo.svg')}"></aside>
-			</div>
+      </div>
 
 			<div class="col-9">
         <main>
@@ -52,11 +52,11 @@
               </td>
               <td style="width: 24%">
                 <span th:unless="${query}">
-									<input class="form-control" type="text" id="query" placeholder="검색할 내용" onkeydown="handleEnter(event)">
-								</span>
+                  <input class="form-control" type="text" id="query" placeholder="검색할 내용" onkeydown="handleEnter(event)">
+                </span>
                 <span th:if="${query}">
-									<input class="form-control" type="text" id="query" th:value="${query}" onkeydown="handleEnter(event)">
-								</span>
+                  <input class="form-control" type="text" id="query" th:value="${query}" onkeydown="handleEnter(event)">
+                </span>
               </td>
               <td style="width: 8%">
                 <button class="btn btn-outline-primary" onclick="search()">검색</button>
@@ -93,36 +93,36 @@
 
           <!-- pagination -->
           <ul class="pagination justify-content-center my-4">
-						<span th:if="${session.currentBookPage gt 10}">
-							<li class="page-item"><a class="page-link" th:href="@{/book/list(p=${startPage-1},f=${field},q=${query})}"><i class="fa-solid fa-less-than"></i></a></li>
-						</span>
+            <span th:if="${session.currentBookPage gt 10}">
+              <li class="page-item"><a class="page-link" th:href="@{/book/list(p=${startPage-1},f=${field},q=${query})}"><i class="fa-solid fa-less-than"></i></a></li>
+            </span>
             <span th:if="${session.currentBookPage le 10}">
-							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
+            </span>
             <span th:each="page: ${pageList}">
-							<span th:switch="${page}">
-								<th:block th:case="${session.currentBookPage}">
-									<li class="page-item active">
-										<a class="page-link" href="#">[[${page}]]</a>
-									</li>
-								</th:block>
-								<th:block th:case="*">
-									<li class="page-item">
-										<a class="page-link" th:href="@{/book/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
-									</li>
-								</th:block>
-							</span>
-						</span>
+              <span th:switch="${page}">
+                <th:block th:case="${session.currentBookPage}">
+                  <li class="page-item active">
+                    <a class="page-link" href="#">[[${page}]]</a>
+                  </li>
+                </th:block>
+                <th:block th:case="*">
+                  <li class="page-item">
+                    <a class="page-link" th:href="@{/book/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
+                  </li>
+                </th:block>
+              </span>
+            </span>
             <span th:if="${totalPages gt endPage}">
-							<li class="page-item"><a class="page-link" th:href="@{/book/list(p=${endPage+1},f=${field},q=${query})}"><i class="fa-solid fa-greater-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" th:href="@{/book/list(p=${endPage+1},f=${field},q=${query})}"><i class="fa-solid fa-greater-than"></i></a></li>
+            </span>
             <span th:if="${totalPages eq endPage}">
-							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
-						</span>
+              <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a></li>
+            </span>
           </ul>
         </main>
-			</div>
-		</div>
+      </div>
+    </div>
   </div>
 
 </body>

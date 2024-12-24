@@ -7,10 +7,10 @@
   <div th:insert="~{fragments/base :: top}"></div>
 
   <div class="container" style="margin-top:80px">
-		<div class="row">
-			<div class="col-3">
+    <div class="row">
+      <div class="col-3">
         <aside th:replace="~{fragments/base :: aside('/img/female.jpg')}"></aside>
-			</div>
+      </div>
 
       <div class="col-9">
         <main>
@@ -26,17 +26,23 @@
             <tr><td th:text="${bookEs.title}">트렌드 코리아 2025</td></tr>
             <tr><td th:text="${bookEs.author}">김난도 외 9명</td></tr>
             <tr><td th:text="${bookEs.company}">미래의 창</td></tr>
-            <tr><td>
-              <span th:text="|${#numbers.formatInteger(bookEs.price, 0, 'COMMA')}원|">15,000원</span>
-            </td></tr>
-            <tr><td colspan="2">
-              <span th:utext="${bookEs.summary}">책 소개 내용</span>
-            </td></tr>
-            <tr><td colspan="2" style="text-align: center;">
-              <button class="btn btn-primary" onclick="location.href='/bookEs/list'">
-                목록으로
-              </button>
-            </td></tr>
+            <tr>
+              <td>
+                <span th:text="|${#numbers.formatInteger(bookEs.price, 0, 'COMMA')}원|">15,000원</span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <span th:utext="${bookEs.summary}">책 소개 내용</span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align: center;">
+                <button class="btn btn-primary" onclick="location.href='/bookEs/list'">
+                  목록으로
+                </button>
+              </td>
+            </tr>
           </table>
         </main>
       </div>
