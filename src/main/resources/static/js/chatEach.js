@@ -2,7 +2,7 @@ let socket;
 let userId, recipientId;
 
 function connect() {
-	userId = document.getElementById('userId').value;
+    userId = document.getElementById('userId').value;
     const chattingStatus = document.getElementById('chattingStatus').value;
     console.log(chattingStatus);
     const serverPort = $('#serverPort').val();
@@ -10,20 +10,20 @@ function connect() {
     //	socket = new WebSocket('ws://localhost:' + serverPort + '/chat?userId=' + userId + '&status=' + chattingStatus);
     socket = new WebSocket(`ws://${serverIp}:${serverPort}/chat?userId=${userId}&status=${chattingStatus}`);
 
-	socket.onopen = () => {
-		console.log('Connected as ' + userId);
-		$('#statusIcon').css({color: 'green', fontWeight: 'bold'});
-	}
-	socket.onmessage = async(event) => {
-		console.log('Message from server: ' + event.data);
-		setTimeout(async () => {
-		    await fetchChatItems();
-		}, 100);
-	}
-	socket.onclose = () => {
-		console.log('Disconnected from the server');
+    socket.onopen = () => {
+        console.log('Connected as ' + userId);
+        $('#statusIcon').css({color: 'green', fontWeight: 'bold'});
+    }
+    socket.onmessage = async(event) => {
+        console.log('Message from server: ' + event.data);
+        setTimeout(async () => {
+            await fetchChatItems();
+        }, 100);
+    }
+    socket.onclose = () => {
+        console.log('Disconnected from the server');
         $('#statusIcon').css({color: 'red', fontWeight: 'bold'});
-	}
+    }
 }
 
 async function fetchChatItems() {
@@ -100,10 +100,10 @@ function updateChatContainer(chatItemsByDate) {
 }
 
 function handleEnterKey(event) {
-	if (event.key === 'Enter') {
-		event.preventDefault();     // 줄바꿈 방지(기본 엔터 키 동작 방지)
-		sendMessage();
-	}
+    if (event.key === 'Enter') {
+        event.preventDefault();     // 줄바꿈 방지(기본 엔터 키 동작 방지)
+        sendMessage();
+    }
 }
 
 function sendMessage() {

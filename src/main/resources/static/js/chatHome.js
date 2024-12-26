@@ -2,27 +2,27 @@ let socket;
 let userId, recipientId;
 
 function connect() {
-	userId = document.getElementById('userId').value;
+    userId = document.getElementById('userId').value;
     const chattingStatus = document.getElementById('chattingStatus').value;
     const serverPort = $('#serverPort').val();
     const serverIp = $('#serverIp').val();
-//	socket = new WebSocket('ws://localhost:' + serverPort + '/chat?userId=' + userId + '&status=' + chattingStatus);
+    //	socket = new WebSocket('ws://localhost:' + serverPort + '/chat?userId=' + userId + '&status=' + chattingStatus);
     socket = new WebSocket(`ws://${serverIp}:${serverPort}/chat?userId=${userId}&status=${chattingStatus}`);
 
-	socket.onopen = () => {
-		console.log('Connected as ' + userId);
-		$('#statusIcon').css({color: 'green', fontWeight: 'bold'});
-	}
-	socket.onmessage = async(event) => {
-		console.log('Message from server: ' + event.data);
-		setTimeout(async () => {
-		    await fetchChatterList();
-		}, 200);
-	}
-	socket.onclose = () => {
-		console.log('Disconnected from the server');
+    socket.onopen = () => {
+        console.log('Connected as ' + userId);
+        $('#statusIcon').css({color: 'green', fontWeight: 'bold'});
+    }
+    socket.onmessage = async(event) => {
+        console.log('Message from server: ' + event.data);
+        setTimeout(async () => {
+            await fetchChatterList();
+        }, 200);
+    }
+    socket.onclose = () => {
+        console.log('Disconnected from the server');
         $('#statusIcon').css({color: 'red', fontWeight: 'bold'});
-	}
+    }
 }
 
 async function fetchChatterList() {
@@ -67,12 +67,12 @@ function updateChatterList(chatterList) {
 }
 
 function disconnect() {
-	if (socket && socket.readyState === socket.OPEN) {
-		socket.close();
-		console.log('Disconnected from the server by ' + recipientId);
-	} else {
-		alert('WebSocket is not connected.');
-	}
+    if (socket && socket.readyState === socket.OPEN) {
+        socket.close();
+        console.log('Disconnected from the server by ' + recipientId);
+    } else {
+        alert('WebSocket is not connected.');
+    }
 }
 
 function handlePopover() {

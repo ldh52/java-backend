@@ -31,7 +31,7 @@
             <tr th:each="orderItem: ${order.orderItems}" style="vertical-align: middle;">
               <td style="width: 8%;" th:text="${orderItemStat.count}">No.</td>
               <td style="text-align: center; width: 10%;">
-                  <img th:src="${orderItem.book.imageUrl}" alt="${orderItem.book.title}" height="60">
+                <img th:src="${orderItem.book.imageUrl}" alt="${orderItem.book.title}" height="60">
               </td>
               <td style="text-align: left; width: 50%;" th:text="${orderItem.book.title}">제목</td>
               <td style="text-align: right; width: 10%;" th:text="${#numbers.formatInteger(orderItem.book.price, 0, 'COMMA')}">20000</td>
