@@ -24,7 +24,7 @@
 <body>
   <div th:insert="~{fragments/base :: top}"></div>
 
-  <div class="container" style="margin-top:80px"></div>
+  <div class="container" style="margin-top:80px">
     <div class="row">
       <div class="col-3">
         <aside th:replace="~{fragments/base :: aside('/img/elastic-logo.png')}"></aside>
@@ -83,7 +83,7 @@
               </th>
               <th style="width: 12%">출판사</th>
               <th style="width: 10%">가격</th>
-                <th style="width: 10%">스코어</th>
+              <th style="width: 10%">스코어</th>
             </tr>
             <tr th:each="bookEsDto: ${bookEsDtoList}">
               <td style="text-align: center;">
@@ -139,8 +139,8 @@
             </span>
           </ul>
         </main>
-			</div>
-		</div>
+      </div>
+    </div>
   </div>
 
 </body>

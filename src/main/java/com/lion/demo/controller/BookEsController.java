@@ -79,6 +79,19 @@ public class BookEsController {
         return "redirect:/bookEs/list";
     }
 
+    @GetMapping("/update/{bookId}")
+    public String updateForm(@PathVariable String bookId, Model model) {
+        BookEs bookEs = bookEsService.findById(bookId);
+        model.addAttribute("bookEs", bookEs);
+        return "bookEs/update";
+    }
+
+    @PostMapping("/update")
+    public String updateProc(BookEs bookEs) {
+        bookEsService.updateBookEs(bookEs);
+        return "redirect:/bookEs/detail/" + bookEs.getBookId();
+    }
+
     @GetMapping("/delete/{bookId}")
     public String delete(@PathVariable String bookId) {
         bookEsService.deleteBookEs(bookId);

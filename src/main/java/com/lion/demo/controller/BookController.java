@@ -70,6 +70,25 @@ public class BookController {
         return "redirect:/book/list";
     }
 
+    @GetMapping("/update/{bid}")
+    public String updateForm(@PathVariable long bid, Model model) {
+        Book book = bookService.findByBid(bid);
+        model.addAttribute("book", book);
+        return "book/update";
+    }
+
+    @PostMapping("/update")
+    public String updateProc(Book book) {
+        bookService.updateBook(book);
+        return "redirect:/book/detail/" + book.getBid();
+    }
+
+    @GetMapping("/delete/{bid}")
+    public String delete(@PathVariable long bid) {
+        bookService.deleteBook(bid);
+        return "redirect:/book/list";
+    }
+
     // 초기 데이터
     @GetMapping("/yes24")
     public String yes24() {

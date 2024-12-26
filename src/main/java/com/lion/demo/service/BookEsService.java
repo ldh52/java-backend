@@ -28,6 +28,10 @@ public class BookEsService {
         bookEsRepository.save(bookEs);
     }
 
+    public void updateBookEs(BookEs bookEs) {
+        bookEsRepository.save(bookEs);
+    }
+
     public void deleteBookEs(String bookId) {
         bookEsRepository.deleteById(bookId);
     }

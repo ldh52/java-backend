@@ -26,8 +26,9 @@ public class SecurityConfig {
                                 "/websocket/**", "/echo", "/personal",
                                 "/mall/list", "/mall/detail/**", "/user/register", "/h2-console", "/demo/**",
                                 "/img/**", "/js/**", "/css/**", "/error/**").permitAll()
-                        .requestMatchers("/book/insert", "/book/yes24", "/bookEs/yes24", "/order/listAll", "/restaurant/init",
-                                "/order/bookStat", "/user/delete", "/user/list").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/book/insert", "/book/update/**", "/book/delete/**", "/book/yes24",
+                                "/bookEs/insert", "/bookEs/update/**", "/bookEs/delete/**", "/bookEs/yes24", "/restaurant/init",
+                                "/order/bookStat", "/order/listAll", "/user/delete", "/user/list").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(auth -> auth
